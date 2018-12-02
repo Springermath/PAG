@@ -1,0 +1,1793 @@
+\documentclass[12pt,a4paper]{scrartcl}
+
+\usepackage{includes}
+\usepackage{shortcuts}
+\usepackage{numbering}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Stroppel hat jetzt leider andere Nummerierungsvorlieben... %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setlist[enumerate,1]{label=\textup{\arabic*)}}
+
+\renewcommand{\thethmcounter}{\Roman{section}.\arabic{thmcounter}}
+
+\counterwithout{thmcounter}{subsection}
+\counterwithin{thmcounter}{section}
+\counterwithin{subsection}{section}
+
+\theoremstyle{cplain}
+\newtheorem{cor}[thmcounter]{Corollary}
+\crefname{cor}{Corollary}{Corollaries}
+
+\theoremstyle{cplain}
+\newtheorem{thm}[thmcounter]{Theorem}
+\crefname{thm}{Theorem}{Theorems}
+
+\theoremstyle{cplain}
+\newtheorem{prop}[thmcounter]{Proposition}
+\crefname{prop}{Proposition}{Propositions}
+
+\theoremstyle{definition}
+\newtheorem*{deff}{Definition}
+
+% Literatur
+\usepackage[backend=biber,sorting=none,style=alphabetic]{biblatex}
+\addbibresource{literatur.bib}
+
+\title{Algebra II}
+\subtitle{Winter Semester 2018/19}
+\date{\lastcompiled}
+
+\begin{document}
+\begin{otherlanguage}{english}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\noindent
+These are notes of the lecture \enquote{Algebra II}, taught by Prof. Dr. Catharina Stroppel at the University of Bonn in the winter semester 2018/19.
+
+\bigskip
+
+\noindent
+Lecture website:\\
+\url{http://guests.mpim-bonn.mpg.de/enorton/alg2.html}
+
+\nocite{hungerford}
+\nocite{knapp-basic}
+\nocite{knapp-advanced}
+\nocite{procesi}
+\nocite{borel}
+\nocite{humphreys}
+\nocite{springer}
+\printbibliography
+
+\newpage
+
+\lecture{October 8, 2018}
+
+\section{Group actions}
+If $G$ is a group, denote by $e \in G$ the neutral element, by $g^{-1}$ the inverse of $g\in G$ and by $gh$ the composition $g \circ h$.
+\begin{deff}
+  Given a group $G$ and a set $X$, an \emph{action} of $G$ on $X$ is a map
+  \begin{eqnarray*}
+    G \times X &\to& X \\
+    (g,x) &\mapsto& g.x
+  \end{eqnarray*}
+  such that
+  \begin{description}
+   \item[(A1)] $e.X = x$ and
+   \item[(A2)] $(gh).x = g.(h.x)$
+  \end{description}
+  for all $x \in X$ and $g,h \in G$. We call then $X$ a \emph{$G$-set}.
+\end{deff}
+\begin{deff}
+  Given a set $X$, define \[ S(X) := \set{f\colon X \to X \given f \text{ bijective}}, \] the \emph{symmetric group} of $X$ (with composition as group multiplication).
+  
+  Given a $G$-set $X$ and $g\in G$, let $\pi_g \in S(X)$ be defined as $\pi_g(x) = g.x$.
+\end{deff}
+\begin{lem}
+  For any group $G$ and set $X$ we have a bijective correspondence
+  \begin{eqnarray*}
+    \set{\text{$G$-actions on $X$}} &\xlongleftrightarrow{1:1}& \set{\text{Group homomorphisms $G \to S(X)$}} \\
+    \pi &\mapsto& \hat\pi = (g \mapsto (x \mapsto \pi(g,x) = g.x)) \\
+    ((g,x)\mapsto \phi(g)(x))=\mathring \phi &\mapsfrom& \phi.
+  \end{eqnarray*}
+\end{lem}
+\begin{proof}
+  Left to the reader.
+\end{proof}
+
+\paragraph{Examples.}
+Let $G$ be a group.
+\begin{enumerate}
+  \item $G$ acts on itself by
+  \begin{itemize}
+    \item left multiplication: $g.x = gx$ (left regular action)
+    \item \enquote{right multiplication}: $g.x = xg^{-1}$ (right regular action)
+    \item conjugation $g.x = gxg^{-1}$
+  \end{itemize}
+  \item Any set $X$ is a $G$-set via the \emph{trivial action} $g.x = x$.
+  \item Let $X,Y$ be $G$-sets. then $G$ acts on $\Maps(X,Y) := \set{f\colon X\to Y}$ via $(g.f)(x) = g.(f(g^{-1}.x))$. Special case: the action $Y$ is trivial, then $(g.f)(x) = f(g^{-1}.x)$.
+\end{enumerate}
+
+\begin{deff}
+  Let $X,Y$ be $G$-sets. A map $f\colon X\to Y$ is called \emph{$G$-equivariant} if $f(g.x) = g.f(x)$ for all $g\in G$ and $x \in X$. We write \[\Hom_G(X,Y) := \set{f\colon X\to Y \given \text{$f$ is $G$-equivariant}}.\]
+\end{deff}
+\begin{lem}
+  Let $G$ be a group.
+  \begin{enumerate}
+    \item If $X$ is a $G$-set then $\id_X\in \Hom_G(X,X)$.
+    \item If $X,Y,Z$ are $G$-sets, $f_1 \in \Hom_G(X,Y)$ and $f_2 \in \Hom_G(Y,Z)$ then $f_2 \circ f_1 \in \Hom_G(X,Z)$.
+  \end{enumerate}
+\end{lem}
+\begin{proof}
+  Left to the reader.
+\end{proof}
+
+\paragraph{Examples.}
+Let $G$ be a group.
+\begin{enumerate}
+  \item If $G$ acts on itself by left multiplication then
+  \begin{eqnarray*}
+    \Hom_G(G,G) &\cong& G \quad\text{(as sets)} \\
+    f &\mapsto& f(e) \\
+    (x\mapsto xa) = m_a &\mapsfrom& a.
+  \end{eqnarray*}
+  \item If $X,Y$ are trivial $G$-sets then $\Hom_G(X,Y) = \Maps(X,Y)$.
+\end{enumerate}
+
+% TODO besseres Symbol für Menge der Orbits
+\begin{deff}
+  Let $X$ be a $G$-set. For $x\in X$ let $G_x = \set{g.x \given g \in G}$ be the \emph{orbit} of $x$. We write \[ \orbits GX := \set{G_x \given x \in X}.\]
+\end{deff}
+\medskip
+Note that $G_x = G_y$ iff $y \in G_x$.
+
+\paragraph{Remark.}
+We can view $\orbits GX$ as a $G$-set via the trivial action. Then $\can\colon X \to \orbits GX,x \mapsto G_x$ is $G$-equivariant.
+
+\begin{deff}
+  Let $X$ be a $G$-set. Then \[X^G := \set{x \in X \given \forall g\in G: g.x = x}\] is the \emph{set of $G$-fixed points} or \emph{$G$-invariants} in $X$.
+\end{deff}
+\begin{lem}
+  Let $X,Y$ be $G$-sets and $f\in \Hom_G(X,Y)$. Then, $f(X^G) \subseteq Y^G$.
+\end{lem}
+\begin{proof}
+  Let $x\in X^G$. For all $g\in G$, we have $g.f(x) = f(g.x) = f(x)$. Therefore, $f(x) \in Y^G$.
+\end{proof}
+
+\medskip
+Thus, $f$ induces a map $f^G\colon X^G \to Y^G$ by restriction.
+
+\begin{lem}
+  Let $G$ be a group.
+  \begin{enumerate}
+    \item If $X$ is a $G$-set then $\id_X^G = \id_{X^G}$.
+    \item If $X,Y,Z$ are $G$-sets, and $f_1 \in \Hom_G(X,Y)$ and $f_2\in \Hom_G(Y,Z)$ then $(f_2\circ f_1)^G = f_2^G \circ f_1^G$.
+  \end{enumerate}
+\end{lem}
+\begin{proof}
+  Left to the reader.
+\end{proof}
+\begin{lem}
+  Let $X,Y$ be $G$-sets. Then $\Hom_G(X,Y) = \Maps(X,Y)^G$.
+\end{lem}
+\begin{proof}
+  $f \in \Hom_G(X,Y) \Leftrightarrow \forall g\in G,x \in X: f(g.x) = g.f(x) \Leftrightarrow \forall g\in G,x \in X:g^{-1}.f(g.x) = g^{-1}.(g.f(x)) = f(x) \Leftrightarrow \forall g\in G,x \in X: g.f(g^{-1}.x) = f(x) \Leftrightarrow f\in \Maps(X,Y)^G$.
+\end{proof}
+\begin{deff}
+  Let $X$ be a $G$ set and $k$ a field. A map $f\colon X\to k $ is \emph{$G$-invariant} if $f(g.x) = f(x)$ for all $g \in G$ and $x\in X$.
+\end{deff}
+
+\paragraph{Example.}
+Let $G= \fak\IZ{2\IZ} = \set{e,s}$ and $k=\IR$. Let $G$ act on $\IR$ by $s.\lambda = -\lambda$. Any polynomial $p(t) \in \IR[t]$ can be viewed as an element in $\Maps(\IR,\IR)$. Then $p(t) = \sum a_it^i$ is $G$-invariant iff $p(t)$ is even (i.e. $a_i=0$ for odd $i$).
+\begin{proof}
+  \begin{align*}
+    \qedherea
+    &\phantom{{}\Leftrightarrow{}}\quad \text{$p(t)$ is $G$-invariant} \\
+    &\Leftrightarrow\quad \forall \lambda \in \IR: p(s.\lambda) = p(\lambda) \\
+    &\Leftrightarrow\quad \forall \lambda \in \IR: p(-\lambda) = p(\lambda) \\
+    &\Leftrightarrow\quad \forall \lambda \in \IR: \sum_i (-1)^ia_i \lambda^i = \sum_i a_i \lambda^i \\
+    &\Leftrightarrow\quad \forall \lambda \in \IR: 2 \sum_{\text{$i$ odd}} a_i\lambda^i = 0 \\
+    &\Leftrightarrow\quad \text{$a_i=0$ for all odd $i$}
+    \qedhere
+  \end{align*}
+\end{proof}
+
+\paragraph{Remark.}
+$f\colon X \to k$ is $G$-invariant iff $f\in \Maps(X,k)^G$ where we have trivial $G$-action on $k$.
+
+\begin{lem}[Universal property of invariant maps]
+  Let $X$ be a $G$-set, $k$ a field (or a commutative ring with $1$). Then $f\colon X \to k$ is $G$-invariant iff $f$ factors through $\can$ (i.e. $\exists! \ol f\colon \orbits GX \to k$ such that $f = \ol f \circ \can$).
+  \begin{center}
+    \begin{tikzcd}
+      X \arrow{r}{f} \arrow[swap]{d}{\can} & k \\
+      \orbits GX \arrow[dashed,swap]{ru}{\exists!\ol f}
+    \end{tikzcd}
+  \end{center}
+\end{lem}
+\begin{proof}
+  \begin{align*}
+    \qedherea
+    &\phantom{{}\Leftrightarrow{}}\quad \text{$f$ is $G$-invariant} \\
+    &\Leftrightarrow\quad \forall g\in G, x \in X : f(g.x) = f(x) \\
+    &\Leftrightarrow\quad \text{$f$ is constant on orbits} \\
+    &\Leftrightarrow\quad \text{$\ol f$ exists (namely $\ol f(G_x) = f(x)$, obviously unique)}
+    \qedhere
+  \end{align*}
+\end{proof}
+\begin{lem} \label{lem:I.7}
+  Let $X$ be a finite $G$-set and $k$ a field (or commutative ring with $1$). Then:
+  \begin{enumerate}
+    \item\label{lem:I.7:1} $\Maps(X,k)$ is a $k$-vector space (or $k$-module) with pointwise addition and scalar multiplication.
+    \item\label{lem:I.7:2} A $k$-basis of $\Maps(X,k)$ is given by \[ \Xs_x\colon y \mapsto \begin{cases*} 1 & if $x = y$ \\ 0 & otherwise \end{cases*}\] where $x \in X$.
+    \item\label{lem:I.7:3} $\Maps(X,k)^G$ forms a subspace (or submodule) with basis \[ \Xs_\Gs \colon y \mapsto \begin{cases*} 1 & if $y \in \Gs$ \\ 0 & otherwise \end{cases*} \] where $\Gs \in \orbits GX$.
+  \end{enumerate}
+\end{lem}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[label=\ref{lem:I.7:\arabic*}]
+    \item Clear.
+    \item \begin{description}
+            \item[Generating system:] Let $f \in \Maps(X,k)$. Then $f= \sum_{x\in X}f(x)\Xs_x$, as we have $\sum_{x\in X}f(x)\Xs_x(y) = f(y)$ for all $y \in X$.
+            \item[Linear independence:] Let $\sum_{x \in X} a_x\Xs_x = 0$ for some $a_x \in k$. Thus, $\sum_{x \in X} a_x\Xs_x(y) = 0$ for all $y \in X$, and we have $a_y = 0$ for all $y \in X$.
+          \end{description}
+    \item \begin{description}
+            \item[Generating system:] Let $f \in \Maps(X,k)^G$. Hence, $f$ is constant on orbits, and we have $f = \sum_{\Gs \in \orbits GX} a_\Gs \Xs_\Gs$ with $a_\Gs = f(x)$ for $x \in \Gs$.
+            \item[Linear independence:] As in \ref{lem:I.7:2}.
+            \qedhere
+          \end{description}
+  \end{enumerate}
+\end{proof}
+
+If $X$ is an infinite set we often replace $\Maps(X,k)$ by \[kX := \set{f\colon X \to k \given \text{$\supp f$ is finite}} \] where $\supp f := \set{ x \in X \given f(x) \neq 0}$ is the \emph{support} of $f$.
+
+\paragraph{Note.}
+We have
+\begin{align*}
+  \supp(f_1+f_2) &\subseteq \supp f_1 \cup \supp f_2, \\
+  \supp(\lambda f) &\subseteq \supp f
+\end{align*}
+for all $f_1,f_2,f\in \Maps(X,k)$ and $\lambda \in k\setminus \set0$. Thus, $kX \subseteq \Maps(X,k)$ together with the $0$-function is a vector space (usually just call it $kX$ as well).
+
+$kX$ is preserved under $G$-action. Let $f \in kX, g \in G$. Then 
+\begin{align*}
+  &\phantom{{}\Leftrightarrow{}}\quad (g.f)(x) \neq 0 \\
+  &\Leftrightarrow\quad f(g^{-1} .x ) \neq 0 \\
+  &\Leftrightarrow\quad g^{-1}.x \in \supp f\\
+  &\Leftrightarrow\quad x \in \underbrace{\set{g.y \given y \in \supp f}}_{\text{finite}}.
+\end{align*}
+
+\cref{lem:I.7} generalizes to $kX$.
+
+\begin{lem} \label{lem:I.8}
+  Let $G$ be a group and $R$ a ring. Let $G$ act on $R$ by ring homomorphisms (i.e. if $\pi\colon R \to R$ is the action then $\pi_g\colon R\to R$ is a ring homomorphism for all $g\in G$) then $R^G$ is a subring of $R$.
+\end{lem}
+\begin{proof}
+  Let $r_1,r_2 \in R^G$. To show: $r_1+r_2,r_1r_2 \in R^G$. For $g \in G$ we have $g.(r_1+r_2) = \pi_g(r_1+r_2) = \pi_g(r_1) + \pi_g(r_2) = g.r_1 + g.r_2 = r_1+r_2$. Similarly, $g.(r_1r_2) = r_1r_2$.
+\end{proof}
+
+\paragraph{Example.} Even polynomials form a subring of $\IR[t]$.
+
+\begin{deff}
+  If $G,H$ are groups and $X$ a $G$-set and an $H$-set then the two actions \emph{commute} if \[g.(h.x) = h.(g.x)\] for all $g\in G$, $h\in H$ and $x \in X$.
+\end{deff}
+
+\lecture{October 11, 2018}
+
+\section{Representations of groups}
+\begin{deff}
+  Let $G$ be a group, $V$ a $k$-vector space and $G\times V \to V$ an action. This action is \emph{linear} if $\pi_g\colon V\to V$ is a linear map for all $g\in G$. Then $V$ is called a \emph{$G$-space} or a \emph{representation} of $G$.
+\end{deff}
+
+\paragraph{Example.} If $V$ is a $k$-vector space then $\GL(V)$ acts linearly on $V$ by $g.v = g(v)$ for all $g \in \GL(V)$ and $v\in V$. We call this the \emph{standard representation}.
+
+\paragraph{Remark.}
+We have a bijection
+\begin{eqnarray*}
+  \set{\text{linear $G$-actions on $V$}} &\xleftrightarrow{1:1}& \set{\text{group homomorphisms $G \to \GL(V)$}}, \\
+  \pi &\mapsto& (g \mapsto \pi_g).
+\end{eqnarray*}
+
+\paragraph{Examples.}
+\begin{enumerate}
+  \item Let $X$ be a $G$-set. Then $kX$ is a representation (the \emph{regular representation} of $kX$) of $G$ via \[ g.\pa{\sum_{x\in X} a_x \Xs_x} = \sum_{x \in X} a_x \Xs_{g.x}. \]
+  \item Let $V$ and $W$ be representations of $G$ over $K$. Then the $G$-action on $\Maps(V,W)$ induces a $G$-action on $\Hom_k(V,W) = \set{f\colon V\to W \given \text{$f$ $k$-linear}}$.
+  \item Let $V$ and $W$ be representations of $G$ over $k$. Then $V \oplus W$ and $V\tp W$ are representations of $G$, called direct sum and tensor product via $g.(v,w) = (g.v,g.w)$ and $g.(v\tp w) = (g.v)\tp (g.w)$ extended linearly.
+\end{enumerate}
+
+\begin{deff}
+  Let $V$ be a representation of $G$ over $k$.
+  \begin{itemize}
+    \item A \emph{subrepresentation} of $V$ is a vector subspace $U$ of $V$ such that $g.u \in U$ for all $g \in G$ and $u \in U$. It is \emph{proper} if $0 \neq U \neq V$.
+    \item $V$ is \emph{irreducible} if $V\neq 0$ and there is no proper subrepresentation.
+    \item $V$ is \emph{indecomposable} if it cannot be written as a decomposition $V=U_1 \oplus U_2$ such that $U_1$ and $U_2$ are proper subrepresentations.
+    \item $V$ is \emph{completely reducible} if $V = \sum_{i \in I} V_i$ where $V_i$ are irreducible subrepresentations (for some set $I$).
+  \end{itemize}
+\end{deff}
+
+\paragraph{Example.}
+Let \[ G = \set*{\begin{pmatrix}a&b\\0&c\end{pmatrix} \given a,b,c \in \IC, a,c \neq 0 } \] act on $V = \IC^2$ by standard action. Then $U = \gen{\begin{pmatrix}1\\0\end{pmatrix}}$ is a proper subrepresentation of $V$, but $V$ is not irreducible. But $V$ is indecomposable since $U$ is the unique proper subrepresentation. To see this, assume $U' = \gen{\begin{pmatrix}x\\y\end{pmatrix}}$ to be a proper subrepresentation. Then \[ \begin{pmatrix}1&1\\0&1\end{pmatrix} \begin{pmatrix}x\\y\end{pmatrix} = \begin{pmatrix}x+y\\y\end{pmatrix} \in U', \] and as $U'$ is a subspace, we have $\begin{pmatrix}y\\0\end{pmatrix} \in U'$ and therefore $U' = U$. $V$ is also not completely irreducible.
+
+\begin{deff}
+  Let $G$ be a group and $k$ a field. The group algebra of $G$ over $k$ is the $k$-algebra given by the $k$-vector space \[ kG = \set{f \colon G \to k \given \text{$\supp f$ is finite}} \] with multiplication given by convolution of functions \[ (f_1\cdot f_2)(x) = \sum_{y \in G} f_1(y)f_2(y^{-1}x) \] with unit $1 = \Xs_e$.
+\end{deff}
+Indeed, we have
+\begin{align*}
+  (f\cdot \Xs_e)(x) &= \sum_{y \in G} f(y) \underbrace{\Xs_e(y^{-1}x)}_{\mathclap{\text{nonzero iff $y = x$}}} = f(x)  &&\text{and}
+  &(\Xs_e \cdot f)(x) &= \sum_{y \in G} \underbrace{\Xs_e(y)}_{\mathclap{\text{nonzero iff $y = 1$}}}f(y^{-1}x) = f(x)
+\end{align*}
+for all $f \in kG$. It remains to check associativity and distributivity.
+
+\paragraph{Remark.} The group algebra can be defined in the same way over any commutative ring with $1$. We write \[ \sum_{g \in G} a_g g := \sum_{g \in G} a_g \Xs_g \] where $a_g \in k$ and almost all $a_g = 0$.
+
+\begin{lem}
+  The algebra structure on $kG$ is given by extending the multiplication on $G$ bilinearly.
+\end{lem}
+\begin{proof}
+  We have \[ (\Xs_g \cdot \Xs_h) (x) = \sum_{y \in G} \Xs_g(y) \Xs_h(y^{-1}x) = \begin{cases*}
+                                                                                  1 & if $h = g^{-1}x$ \\
+                                                                                  0 & otherwise
+                                                                                \end{cases*} = \Xs_{gh}(x). \]
+  By definition the convolution product extends this bilinearly.
+\end{proof}
+
+\paragraph{Note.} $kG$ is commutative iff $G$ is abelian.
+
+\begin{lem} \label{lem:II.2}
+  Let $G$ be a group and $V$ a $k$-vector space. Then
+  \begin{eqnarray*}
+    \set{\text{linear $G$-actions on $V$}} &\xleftrightarrow{1:1}& \set{\text{$kG$-module structures on $V$}}, \\
+    (G \times V \to V) &\mapsto& \pa{\pa{\sum_{g\in G} a_g g}.v := \sum_{g\in G} a_g (g.v)}.
+  \end{eqnarray*}
+\end{lem}
+\begin{proof}
+  Left to the reader.
+\end{proof}
+
+\begin{deff}
+  Let $V$ and $W$ be representations of $G$ over $k$. A \emph{morphism} (of representations) from $V$ to $W$ si a linear, $G$-equivariant map $f\colon V\to W$. Denote $\Hom_G(V,W) := \set{f \colon V \to W \text{ morphisms of representations}}$ and $\End_G(V) := \Hom_G(V,V)$.
+\end{deff}
+
+\paragraph{Note.} $\Hom_G(V,W)$ is a vector space. Write $V \cong W$ if there exists an isomorphism $V \to W$.
+
+\begin{lem}
+  Let $G$ be a group and $k$ a field. Representations of $G$ over $k$ together with morphisms of representations  form a category $\Rep_k(G)$.
+\end{lem}
+\begin{proof}
+  See \cref{lem:II.2}.
+\end{proof}
+
+\paragraph{Example.} For a field $k$, the $k$-vector spaces together with $k$-linear maps form a category $\Vect_k$.
+
+\begin{cor}
+  Let $k$ be a field. The assignments
+  \begin{eqnarray*}
+    F \colon \Rep_k(G) &\to& \Vect_k\\
+    V &\mapsto& V^G \\
+    f &\mapsto& f^G\colon V^G \to W^G
+  \end{eqnarray*}
+  define a functor from $\Rep_k(G)$ to $\Vect_k$, the functor of $G$-invariants.
+\end{cor}
+\begin{proof}
+  Left to the reader.
+\end{proof}
+
+\begin{lem} \label{lem:II.5}
+  If $f\colon V \to W$ is a morphism of representations of $G$ then $\ker f$ and $\im f$ are subrepresentations of $V$ respectively $W$.
+\end{lem}
+\begin{proof}
+  $\ker f$ and $\im f $ are subspaces since $f$ is linear. Let $g \in G$ and $x \in\ker f$. Then $f(g.x) = g.f(x) = g.0 = 0$ and $g.x \in \ker f$, thus $\ker f $ is a subrepresentation.
+  
+  Let $y \im f$ and $x \in V$ with $f(x) = y$. We get $g.y = g.(f(x)) = f(g.x) \im f$.
+\end{proof}
+
+\paragraph{Remark.} It can be shown that $\Rep_k(G)$ is an abelian category.
+
+\begin{lem}[Schur's lemma] \label{lem:schur}
+  Let $G$ be a group and $V,W$ irreducible representations of $G$ over $k$.
+  \begin{enumerate}
+    \item\label{lem:schur:1} $\Hom_G(V,W) = 0$ if $V \ncong W$. If $V \cong W$, we have $\Hom_G(V,W) \neq 0 $ and every non-zero morphism is an isomorphism.
+    \item\label{lem:schur:2} If $k = \ol k$ and $V$ and $W$ are finite-dimensional then \[ \Hom_G(V,W) \cong \begin{cases*}
+                                                                                            k & if $V \cong W$ \\
+                                                                                            0 & if $V \ncong W$
+                                                                                          \end{cases*} \]
+    as representations.
+  \end{enumerate}
+\end{lem}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[label=\ref{lem:schur:\arabic*}]
+    \item Assume $V \cong W$ and $0\neq f \in \Hom_G(V,W)$. This implies $\ker f \neq V$ and $\im F \neq 0$. By \cref{lem:II.5} it follows $\ker f = 0$ and $\im f = W$, since $f$ is a morphism and $V$ and $W$ are irreducible. As $f$ is linear, $f$ is an isomorphism.
+    \item Assume $V \cong W$ and $0\neq \alpha,\beta \in \Hom_G(V,W)$. It is enough to show $\beta = \lambda\alpha$ for some $\lambda \in k$. By \ref{lem:schur:1} $\alpha$ has an inverse $\alpha^{-1}$ (which is again a morphism) and we have $\alpha^{-1}\circ\beta \in \End_G(V)$. If $k=\ol k$ and $V$ is finite-dimensional $\alpha^{-1}\circ\beta$ has eigenvectors. We define $K := \ker(\alpha^{-1}\circ\beta -\lambda\id_V) \neq 0$ for some $\lambda \in k$. Now $\alpha^{-1}\circ\beta - \lambda \id_v \in \End_G(V)$ (the reader may check this statement), thus $K$ is a subrepresentation of $V$, hence $K=V$, since $V$ is irreducible and $K \neq 0$. Therefore, $\alpha^{-1}\circ\beta = \lambda\id_V$ and $\beta = \lambda \alpha$.
+    \qedhere
+  \end{enumerate}
+\end{proof}
+
+\begin{cor}
+  Let $k=\ol k$ and $V_i$ ($1 \le i \le r$) be pairwise non-isomorphic irreducible finite-dimensional representations of $G$ over $k$. Let $W_i := V_i^{\oplus n_i} := V_i \oplus \ldots \oplus V_i$ for some $n_i \in \Z_{>0}$ (a representation of $G$). Then \[ \End_G(W_1 \oplus \ldots \oplus W_r) \cong \M_{n_1\times n_1}(k) \oplus \ldots \oplus M_{n_r \times n_r}(k) \] as algebras.
+\end{cor}
+\begin{proof}
+  We have
+  \begin{align*}
+    \End_G(W_1\oplus \ldots\oplus W_r) &= \Hom_G\pa{\bigoplus_{i=1}^r\bigoplus_{j=1}^{n_i} V_i,\bigoplus_{i=1}^r\bigoplus_{j=1}^{n_i} V_i } \\
+    \intertext{and by \namereff{lem:schur}, since $V_i \cong V_i$, and $\End_G(V_i)\cong k$, we get}
+    &\cong \End_G(V_1^{\oplus n_1}) \oplus \ldots \oplus \End_G(V_r^{\oplus n_r})\\ & \cong \M_{n_1\times n_1}(k) \oplus \ldots \oplus M_{n_r \times n_r}(k).
+    \qedhere
+  \end{align*}
+\end{proof}
+
+\lecture{October 15, 2018}
+
+\begin{thm}[Maschke's theorem] \label{thm:maschke}
+  Let $G$ be a finite group and $k$ a field such that $\chr k \nmid \abs G$ (in particular $\chr k = 0$ is allowed). The the finite-dimensional representations of $G$ over $k$ are completely reducible.
+\end{thm}
+\begin{proof}
+  It is enough to show that for any finite-dimensional representation $V$ of $G$ the following holds: any subrepresentation $U$ of $V$ has a complement in $W$ in $V$ which is again a subrepresentation; so $V = U \oplus W$ as representations. Let $U$ be such a subrepresentation and choose a vector space complement $U'$ so $V = U \oplus U'$ as vector spaces.
+  
+  Define now $\hat p\colon V \to U $ by \[ \hat p(v) = \frac1{\abs G} \sum_{g \in G}\underbrace{g^{-1}.\underbrace{p(g.v)}_{\in U}}_{\in U} \in U. \]
+  Now:
+  \begin{itemize}
+    \item We have ${\displaystyle\hat p(u) = \frac1{\abs G} \sum_{g\in G} g^{-1} .p(g.h.v) = \frac1{\abs G}\sum_{g \in G}g^{-1}.g.u = u }$ for all $u\in U$.
+    \item $\hat p$ is $G$-equivariant, as for any $h\in G$ and $v\in V$
+    \begin{align*}
+      \hat p(h.v) &= \frac1{\abs G} \sum_{g \in G}g^{-1}.p(g.h.v) = \frac1{\abs G} \sum_{g\in G} h.(h^{-1}.(g^{-1}.p(g.h.v)) \\
+      &= h.\pa{\frac1{\abs G} \sum_{g \in G} (gh)^{-1}.p((gh).v)} = h.\pa{\frac1{\abs G} \sum_{g \in G} g^{-1}.p(g.v)} = h.\hat p(v).
+    \end{align*}
+  \end{itemize}
+  Therefore, $V = \im \hat p \oplus \ker \hat p = U \oplus \ker \hat p$ since $\hat p$ is $G$-equivariant. $W := \ker \hat p$ is a subrepresentation of $V$.
+\end{proof}
+\paragraph{Warning.}
+\namereff{thm:maschke} does not hold in general if $\chr k \mid \abs G$. For example, take $G = \fak \IZ{2\IZ} = \set{e,s}$, $k = \IF_2$ and $V = kG$ the regular representation. Then $\gen{e+s}_k$ is a $1$-dimensional subrepresentation, but in fact the unique one. Therefore, it has no complement. (Note: if $\chr k \neq 2$ then $\gen{e+s}_k$ is also a $1$-dimensional subrepresentation and a complement of the above one).
+
+\section{Invariant polynomial functions}
+
+\subsection{Gradings and filtrations}
+\begin{deff}
+  Let $A$ be a $k$-algebra. A \emph{grading} (or \emph{$\IZ$-grading}) on $A$ is a decomposition \[ A = \bigoplus_{i\in IZ} A_i\] into vector subspaces $A_i$ such that $A_iA_j \subseteq A_{i+j}$ for all $i,j\in \IZ$. We call then $A$ a \emph{graded algebra}. The $A_i$ ($i \in \IZ$) are the \emph{graded} (or \emph{homogeneous}) \emph{components}. An element $a_i \in A_i$ is called \emph{homogeneous} (of degree $i$).
+\end{deff}
+\begin{deff}
+  A \emph{grading} of a ring $R$ is a decomposition $R = \bigoplus_{i \in \IZ} R_i$ into $\IZ$-modules such that $R_iR_j \subseteq R_{i+j}$ for all $i,j\in \IZ$. We call then $R$ a \emph{graded} ring and the $R_i$ the \emph{graded}/\emph{homogeneous components}.
+\end{deff}
+
+\begin{lem}
+  Let $k$ be a field and $A$ a $k$-algebra with $1$.
+  \[ A = \bigoplus_{i \in \IZ} A_i\text{ is a graded algebra.} \quad \Longleftrightarrow \quad A = \bigoplus_{i \in \IZ} A_i \text{ is a graded ring and $k1 \subseteq A_0$.} \]
+\end{lem}
+\begin{proof}
+  \leavevmode
+  \begin{description}
+    \item[\enquote{$\Leftarrow$}] $A= \bigoplus _{ i\in\IZ}A_i$ is a decomposition into $k$-vector spaces; in particular into $\IZ$-modules. We have to show $k1 \subseteq A_0$.
+    
+    Write $1 = \sum_{i \in \IZ} e_i$ with $e_i \in A_i$ and almost all $e_i=0$. Then for any $a \in A_j$ we have $a = a1 = \sum_{i \in \IZ}ae_i$. As $ae_i\in A_{j+i}$, we have $a = ae_0$ because the sum $A=\bigoplus_{i \in \IZ}A_i$ is direct. Similarly we get $e_0a = a$. Thus, $e_0 = a = ae_0$ for all $a\in A$, and we have $1 = e_0 \in A_0$ and finally $k1 = ke_0 \subseteq A_0$ since $A_0$ is a vector space.
+    \item[\enquote{$\Rightarrow$}] We have to show that $A_i$ is closed under scalar multiplication for all $i \in \IZ$. Let $\lambda \in k$ and $i\in \IZ$. Then $\lambda A_i = (\lambda1)A_i \subseteq A_0A_i \subseteq A_{0+i} = A_i$.
+    \qedhere
+  \end{description}
+\end{proof}
+
+\paragraph{Examples.}
+\begin{enumerate}
+  \item Let $A$ be any $k$-algebra. It is a graded algebra via the \enquote{stupid grading} $A = \bigoplus_{i \in \IZ} A_i$ where \[ A_i = \begin{cases*}
+                                 A & if $i=0$, \\
+                                 0 & if $i \neq 0$.
+                               \end{cases*} \]
+  \item Let $R= \IZ$ or $R = k$ for a field. Then $A= R[X_1,\ldots,X_n]$ is a graded ring respectively a graded algebra where $A= \sum_{i \in \IZ} A_i$ is given by \[ A_i = \begin{cases*}
+                                                                 0 & if $i<0$, \\
+                                                                 \gen{\set*{X_1^{a_1}\cdots X_n^{a_n} \given \sum_{j=1}^n a_j =i}}_R & else,
+                                                               \end{cases*} \]
+  because clearly the monomials $X_1^{a_1}\cdots X_n^{a_n}$ with $a_i \in \IZ_{\ge0}$ (and by convention $X_1^0\cdots X_n^0=1$) form an $R$-basis of $R[X_1,\ldots,X_n]$ and $(X_1^{a_1}\cdots X_n^{a_n})(X_1^{b_1}\cdots X_n^{b_n}) = (X_1^{a_1+b_1}\cdots X_n^{a_n+b_n})$, so that $a_ia_j \in A_{i+j}$ for all basis elements $a_i \in A_i$ and $a_j \in A_j$ (then also $A_iA_j \subseteq A_{i+j}$).
+  \item Let $V$ be a $k$-vector space. Consider the vector space \[ \T(V) := k \oplus V \oplus (V \tp V) \oplus \ldots = k \oplus \bigoplus_{d\ge1} V^{\tp d} =: \bigoplus_{d \ge 0} V^{\tp d}, \] the \emph{tensor algebra}.
+  We claim that $\T(V)$ is an algebra by setting \[ (\underbrace{v_{i_1} \tp \ldots \tp v_{i_d}}_{\in V^{\tp d}})(\underbrace{v_{j_1} \tp \ldots \tp v_{j_{d'}}}_{\in V^{\tp d'}}) = \underbrace{v_{i_1} \tp \ldots \tp v_{i_d} \tp v_{j_1} \tp \ldots \tp v_{j_{d'}}}_{\in V^{\tp (d+d')}} \] for any $v_{i_r}, v_{j_s}$ in a chosen basis $\set{v_i \given i \in I}$ of $V$ ($1 \le r \le d$, $1 \le s \le d'$) and extended linearly to $\T(V)$ with \begin{align*} \underbrace{\lambda}_{\in V^{\tp 0}} \cdot \underbrace{v}_{\in V^{\tp d}} & := \underbrace{\lambda v}_{\in V^{\tp d}} &&\text{and} & \underbrace{v}_{\in V^{\tp d}} \cdot \underbrace{\lambda}_{\in V^{\tp 0}} & := \underbrace{\lambda v}_{\in V^{\tp d}} . \end{align*}
+  
+  We also claim that $\T(V) = \bigoplus_{i \in \IZ} \T(V)_i$ with \[ \T(V)_i := \begin{cases*}
+                                                                                 V^{\tp i} & if $i \ge 0$ \\
+                                                                                 0 & otherwise
+                                                                               \end{cases*} \]
+  is then a graded algebra.
+\end{enumerate}
+
+\begin{deff}
+  Let $A$ be a $k$-algebra. A \emph{filtration} of $A$ is a (possibly infinite) sequence $F_\bullet(A)$ of vector subspaces of the form \[ 0 = F_{-1}(A) \subseteq F_0(A) \subseteq F_1(A) \subseteq \ldots \subseteq A \] such that
+  \begin{enumerate}
+    \item\label{def:filtered algebra:1} $F_i(A)F_j(A) \subseteq F_{i+j}(A)$ for all $i,j \in \IZ_{\ge -1}$ and
+    \item\label{def:filtered algebra:2} $\displaystyle \bigcup_{i \ge -1} F_i(A) = A$.
+  \end{enumerate}
+  An algebra with a filtration is a \emph{filtered} algebra.
+\end{deff}
+
+\begin{prop}
+  If $A$ is a filtered algebra with filtration $F_\bullet (A)$ then we can consider the vector space \[ \gr A := \bigoplus_{i \in \IZ} (\gr A)_i \quad\text{where}\quad (\gr A)_i = \begin{cases*}
+                                                                          \fak{F_i(A)}{F_{i-1}(A)} & if $i \ge 0$, \\
+                                                                          0 & if $i<0$.
+                                                                        \end{cases*} \]
+  Then $\gr A$ becomes a graded algebra by defining the multiplication \[ (a + F_{i-1}(A))(b+F_{j-1}(A)) := ab + F_{i+j-1}(A) \] for any $a \in F_i(A)$ and $b \in F_j(A)$. It is called the \emph{associated graded algebra} to the filtered algebra $(A,F_\bullet(A))$.
+\end{prop}
+\begin{proof}
+  We have to show that the multiplication is well-defined. Note that we have
+  \begin{alignat*}{2}
+    F_{i-1}(A) b &\subseteq F_{i-1}(A)F_j(A) &&\subseteq F_{i+j-1}(A), \\
+    aF_{j-1}(A) &\subseteq F_i(A)F_{j-1}(A)  &&\subseteq F_{i+j-1}(A), \\
+    F_{i-1}(A) F_{j-1}(A) & \subseteq F_{i+j-2}(A) && \subseteq F_{i+j-1}(A).
+  \end{alignat*}
+  Therefore, we have \[(a + F_{i-1}(A))(b+F_{j}(A))=(c + F_{i-1}(A))(d+F_{j}(A))\] if $a+F_{i-1}(A) = c+F_{i-1}(A)$ in $\fak{F_{i+j}(A)}{F_{i+j-1}(A)}$ and $b+F_j(A) = d+F_j(A)$ for all $a,c \in F_j(A)$ and $b,d \in F_j(A)$.
+  
+  Associativity and distributivity follow from the same properties in $A$.
+\end{proof}
+
+\begin{prop}
+  Let $A = \bigoplus_{i \in \IZ}A_i$ be a graded algebra such that $A_i = 0$ for $i <0$. Then define \[ F_j(A) = \bigoplus_{\mathclap{0\le i \le j}} A_i \] for all $j \ge 0$. Then \begin{equation} 0 =: F_{-1}(A) \subseteq F_0(A) \subseteq F_1(A) \subseteq \ldots \subseteq A \tag{*}\label{prop:III.3:eq} \end{equation} turns into a filtered algebra.
+\end{prop}
+\begin{proof}
+  Obviously $F_j(A) \subseteq A$ are vector subspaces for all $j \ge -1$ and \eqref{prop:III.3:eq} is a sequence of nested vector spaces.
+  \begin{enumerate}
+    \item[\ref{def:filtered algebra:2}] Any $a \in A$ can be written as $a = \sum_{i=0}^\infty a_i$ with $a_i \in A_i$ where almost all $a_i = 0$. There exists $j>0$ such that $a \in F_j(A)$ and we have \[ A \subseteq \bigcup_{j \ge -1} F_j(A). \]
+    \item[\ref{def:filtered algebra:1}] Let $A \in F_r(A)$ and $b \in F_s(A)$. We can write $a = \sum_{i=1}^r a_i$ and $b = \sum_{i=1}^sb_i$ for some $a_i,b_i \in A_i$. Thus we get \begin{align*} ab \in \sum_{{\substack{0\le i \le r\\0\le j \le s}}} \underbrace{a_ib_j}_{A_{i+j}} \in \bigoplus_{l=0}^{r+s}A_l = F_{r+s}(A). \qedhereb \end{align*}
+  \end{enumerate}
+\end{proof}
+
+\paragraph{Remark.}
+At this point Professor Stroppel seems not to have numbered this proposition in her notes. Therefore, the next Lemma will have the same number.
+\addtocounter{thmcounter}{-1}
+
+\paragraph{Examples.}
+\begin{enumerate}
+  \item Let $R = \IZ$ or $R=k$ a field. Consider $A=R[X_1,\ldots,X_n]$. This is a filtered algebra by setting \[ F_j(A) = \gen{\set*{X_1^{a_1}\cdots X_n^{a_n} \given \sum_{i=1}^na_i = j}}_R \] for $j\ge 0$ ($F_{-1}(A) = 0$).
+  \item Let $R=k[t]$ for any field $k$. Consider $\End_k(k[t])$ (linear endomorphisms). There are the two following interesting elements in $\End_k(k[t])$:
+  \begin{xalignat*}{2}
+    X\colon k[t] &\to k[t] & \qquad \partial\colon k[t] &\to k[t] \\
+    p & \mapsto tp & \qquad p &\mapsto p' := \text{formal derivation}
+  \end{xalignat*}
+  Let $A$ be the subalgebra of $\End_k(k[t])$ generated by $X$ and $\partial$. This is called the (first) \emph{Weyl algebra} $\As_1$.
+  
+  We claim that $A$ has basis $\set{X^a\partial^b \given a,b \in \IZ_{\ge 0}}$ (with $X^0\partial^0 = 1$). The reader may check this using the formula $\partial X = X\partial + \id$. Furthermore, one can define a filtration on $A$ via $F_j(A) = \gen{\set{X^a\partial^b \given a+b \le j}}$ for $j \ge 0$.
+\end{enumerate}
+
+\lecture{October 18, 2018}
+
+\paragraph{Remark.}
+For $(A,F_\bullet(A))$ a filtered algebra the canonical map
+\begin{eqnarray*}
+  \can\colon A &\to& \gr A = \bigoplus_{i\ge0}\fak{F_i(A)}{F_{i-1}(A)} \\
+  a &\mapsto& (a+F_{i-1}(A))_{i\ge0}
+\end{eqnarray*}
+is in general \emph{not} an algebra homomorphism.
+
+\begin{deff}
+  Let $A = \bigoplus_{i\in\IZ} A_i$ be a graded algebra and $M$ and $A$-module. Then a \emph{grading} on $M$ is a decomposition $M=\bigoplus_{i\in\IZ}M_i$ into vector spaces such that $A_iM_j \subseteq M_{i+j}$ for all $i,j\in \IZ$. Then $M$ is called a \emph{graded} module.
+  
+  For graded $A$-modules $M=\bigoplus_{i\in\IZ}M_i$ and $N=\bigoplus_{i\in\IZ}N_i$, a morphism of graded $A$-modules from $M$ to $N$ is a morphism $f\colon M \to N$ of $A$-modules such that $f(M_i)\subseteq N_i$ for all $i\in\IZ$.
+\end{deff}
+
+\paragraph{Remark.} Graded $A$-modules with graded $A$-module homomorphisms form a category (where $A$ is a graded algebra).
+
+\subsection{Symmetric polynomials}
+\begin{deff}
+  Let $k$ b a field. Let $G := S_n = S(\set{1,\ldots,n})$ act linearly on $K[X_1,\ldots,X_n]$ by \begin{equation} g. X_1^{a_1}X_2^{a_2}\cdots X_n^{a_n} = X_{g(1)}^{a_1}X_{g(2)}^{a_2}\cdots X_{g(n)}^{a_n}. \tag{*}\label{def:symmetric poly:eq} \end{equation}
+  A polynomial in $k[X_1,\ldots,X_n]^G$ is called a \emph{symmetric} polynomial (in $n$ variables).
+\end{deff}
+
+\paragraph{Remark.} We could replace $k$ by any commutative ring $R$ with $1$ and extend \eqref{def:symmetric poly:eq} $R$-linearly to get an action of $G$ on $R[X_1,\ldots,X_n]$.
+
+\paragraph{Examples.}
+In $K[X_1,X_2,X_3]^{S_3}$ we have e.g. the following elements:
+\begin{align*}
+  p_2^{(3)} &= X_1^2+X_2^2+X_3^2 \\
+  h_2^{(3)} &= X_1^2+X_1X_2+X_1X_3+X_2^2+X_2X_3+X_3^2 \\
+  e_2^{(3)} &= X_1X_2+X_1X_3+X_2X_3 \\
+  m_{(4,4,2)}^{(3)} &= X_1^4X_2^4X_3^2+X_1^4X_2^2X_3^4+X_1^2X_2^4X_3^4+X_1^2X_2^4X_3^4
+\end{align*}
+
+\begin{deff}
+  Let $n\in \IZ_{>0}$ and $r\in\IZ_{\ge0}$. Define the symmetric polynomials
+  \begin{align*}
+    p_r^{(n)} &:= X_1^r+X_2^r+\ldots+X_n^r, \\ \intertext{the $r$-th \emph{power symmetric polynomial} (with $p_0^{(n)} = n$),}
+    h_r^{(n)} &:= \sum_{\abs a = r}X_1^{a_1}X_2^{a_2}\cdots X_n^{a_n} \\ \intertext{where $a = (a_i)_{1\le i\le n}\in \IZ_{\ge 0}^n$ with $\abs a = \sum_{i=1}^na_i$, the $r$-th \emph{complete symmetric polynomial} ($h_0^{(n)} = 1$),}
+    e_r^{(n)} &:= \sum_{\mathclap{1\le i_1<\ldots<i_r\le n}} X_{i_1} X_{i_2}\cdots X_{i_r} = \sum_{\substack{I \subseteq \set{1,\ldots,n}\\\abs I = r}} \prod_{i \in I}X_i, \\ \intertext{the $r$-th \emph{elementary symmetric polynomial} (with $e_0^{(n)} = 1$ and $e_r^{(n)} = 0$ if $r>n$).}
+  \end{align*}
+\end{deff}
+
+\begin{lem}
+  For all $n\in \IZ_{>0}$ we have in $\IZ[X_1,\ldots,X_n][t]$ \[ \prod_{i=1}^n (t-X_i) = t^n-e_1^{n}t^{n-1}+e_2^{(n)}t^{n-2}+\ldots+(-1)^ne_n^{(n)}. \]
+\end{lem}
+\begin{proof}
+  The coefficient of $t^{n-j}$ on the left hand side equals \begin{align*} \sum_{\mathclap{i \le i_1 < \ldots < i_j \le n}} (-X_{i_1})(-X_{i_2})\cdots(-X_{i_j}) = (-1)^j e_j^{(n)}. \qedhereb \end{align*}
+\end{proof}
+
+\begin{thm}[Fundamental theorem of symmetric polynomials] \label{thm:symmetric polys}
+  The elementary symmetric polynomials $e_1^{(n)},\ldots,e_n^{(n)}$ generate $k[X_1,\ldots,X_n]^{S_n}$ as a $k$-algebra. Moreover they are algebraically independent over $k$. That means
+  \begin{eqnarray*}
+    k[X_1,\ldots,X_n]^{S_n} &\to& k[t_1,\ldots,t_n] \\
+    e_j^{(n)} &\mapsto& t_j
+  \end{eqnarray*}
+  is an isomorphism of algebras.
+\end{thm}
+
+\begin{lem} \label{lem:III.5/6}
+  Let $G$ be a group and $V_i$ ($i\in I$) representations of $G$ (over some fixed field $k$). Then \[ \pa{\bigoplus_{i\in I}V_i}^G = \bigoplus_{i \in I}V_i^G \] as vector subspaces of $\bigoplus_{i\in I} V_i$. 
+\end{lem}
+\begin{proof}
+  \leavevmode
+  \begin{description}
+    \item[\enquote{$\supseteq$}] Obvious.
+    \item[\enquote{$\subseteq$}] Let $v = \sum_{i\in I}v_i \in \pa{\bigoplus_{i\in I}V_i}^G$. Then we have \[ v = g.v = g. \pa{\sum_{i\in I}v_i} = \sum_{i \in I}g.v_i \] for all $g \in G$ since the sum is direct. We get $v_i = g.v_i$ for all $i\in I$ and $g \in G$, and therefore $v_i \in V_i^G$ for all $i\in I$.
+    \qedhere
+  \end{description}
+\end{proof}
+
+\begin{lem}
+  A polynomial $f \in k[X_1,\ldots,X_n]$ is symmetric if and only if its homogeneous parts $f_i \in k[X_1,\ldots,X_n]$ are symmetric.
+\end{lem}
+\begin{proof}
+  Let $A = k[X_1,\ldots,X_n] = \sum_{i\in \IZ}k[X_1,\ldots,X_n]_i$ the decomposition (since $A$ is a graded algebra) where \[ k[X_1,\ldots,X_n]_i = \begin{cases*}
+                                            0 & if $i < 0$, \\
+                                            \gen{\set*{X_1^{a_1}\cdots X_n^{a_n}\given \sum_{j=1}^na_j = i}} & otherwise.
+                                          \end{cases*} \]
+  $G = S_n$ acts on $A$ as above and preserves $k[X_1,\ldots,X_n]_i =: A_i$. By \cref{lem:III.5/6} we get \begin{align*} k[X_1\ldots,X_n]^{S_n} = A^G = \bigoplus_{i\in\IZ}A_i^G = \bigoplus_{i\in\IZ}k[X_1,\ldots,X_n]_i^{S_n} \qedhereb \end{align*}
+\end{proof}
+
+The following formula holds for all $1 \le r \le n$ ($n \in \IZ_{>0}$). \[ e_r^{(n)} = e_r^{(n-1)} + X_ne_{r-1}^{(n-1)} \]
+\begin{proof}
+  \begin{align*}
+    \qedherea
+    e_r^{(n)} &= \sum_{\substack{I \subseteq \set{1,\ldots,n}\\\abs I = r}} \prod_{i \in I}X_i = \sum_{\substack{I \subseteq \set{1,\ldots,n-1}\\\abs I = r}} \prod_{i \in I}X_i + X_n \sum_{\substack{I \subseteq \set{1,\ldots,n-1}\\\abs I = r-1}} \prod_{i \in I}X_i \\ &= e_r^{(n-1)} + X_ne_r{-1}^{(n-1)}
+    \qedhereb
+  \end{align*}
+\end{proof}
+
+\begin{lem} \label{lem:III.8}
+  A polynomial $f\in k[X_1,\ldots,X_n]$ is symmetric if and only if it can be expressed as a polynomial in the $e_r^{(n)}$'s (over $k$).
+\end{lem}
+\begin{proof}
+  \leavevmode
+  \begin{description}
+    \item[\enquote{$\Rightarrow$}] We have $e \in k[X_1,\ldots,X_n]^{S_n}$. But $k[X_1,\ldots,X_n]^{S_n}$ is a subring, even a subalgebra.
+    \item[\enquote{$\Leftarrow$}] Let $f \in k[X_1,\ldots,X_n]^{S_n}$ a symmetric polynomial. We use induction on $n$.
+    
+    For $n=1$ we have $k[X_1]^{S_1} = k[X_1]^{\set e} = k[X_1] = k\br{e_1^{(1)}}$.
+    
+    Assume the lemma for $n-1$. Let $d = \deg f$. If $d \le 1$, the claim is obvious. Let $d \ge 2$ and assume the lemma holds for any symmetric polynomial $h$ with $\deg h < d$.
+    
+    Consider
+    \begin{eqnarray*}
+      q \colon k[X_1,\ldots,X_n] &\to& \fak{k[X_1,\ldots,X_n]}{(X_n)} \cong k[X_1,\ldots,X_{n-1}], \\
+      p(x_1,\ldots,x_n) &\mapsto& p(x_1,\ldots,x_{n-1},0).
+    \end{eqnarray*}
+    Check that $q$ is an algebra homomorphism. We have:
+    \begin{itemize}
+      \item $q(e_j^{(n)}) = e_j^{(n-1)}$ for all $0\le j >n$.
+      \item $q(e_n^{(n)}) = 0$.
+      \item $q(f) \in k[X_1,\ldots,X_n]^{S_{n-1}}$, because for $g \in S_{n-1}$
+      \begin{align*}
+        g.(q(f)) &= (q(f))(X_{g^{-1}(1)},X_{g^{-1}(2)},\ldots,X_{g^{-1}(n-1)})) \\
+        &= q(f(X_{g^{-1}(1)},X_{g^{-1}(2)},\ldots,X_{g^{-1}(n)})) \\
+        &= q((g.f)(X_1,\ldots,X_n)) \\ \intertext{and as $f$ is symmetric,}
+        &= q(f).
+      \end{align*}
+    \end{itemize}
+    By induction $q(f)$ is a polynomial $P\pa{e^{(n-1)}_1,\ldots,e_{n-1}^{(n-1)}}$ in $e^{(n-1)}_1,\ldots,e_{n-1}^{(n-1)}$. Set $g= P\pa{e_1^{(n)},\ldots,e_{n-1}^{(n)}}\in k[X_1,\ldots,X_n]$. Because $q$ is an algebra homomorphism we have \[q(g) = P\pa{q\pa{e_1^{(n)}},\ldots,q\pa{e_n^{(n)}}} = P\pa{e_1^{(n-1)},\ldots,e_{n-1}^{(n-1)},0} = q(f). \] Therefore, $q(f-g) = 0$ in $\fak{k[X_1,\ldots,X_n]}{(X_n)}$, and we get $X_n \mid f-g$.
+    
+    By assumption, $f$ is symmetric, by construction, $g$ is symmetric. Thus, $f-g$ is symmetric, and $X_i \mid f-g$ for all $1 \le i \le n$, and we have $X_1X_2\cdots X_n \mid f-g$. Set \[ h = \frac{f-g}{X_1X_2\cdots X_n} = \frac{f-g}{e_n^{(n)}} \] (here we use that $k[X_1,\ldots,X_n]$ is a unique factorization domain). Now due to $\deg g \le \deg f = d$ we have $\deg h < d $. By induction on degree $h$ canb e written as apolynomial in the $e_1^{(n)},\ldots,e_n^{(n)}$. Then, $f -g = e_n^{(n)}h$ as well as $f= e_n^{(n)}h +g$ can be written as such a polynomial by definition of $g$.
+    \qedhere
+  \end{description}
+\end{proof}
+
+\begin{proof}[Proof ot the \namereff{thm:symmetric polys}]
+  \leavevmode\\
+  We still have to show that the $e_1^{(n)},\ldots,e_n^{(n)}$ are algebraically independent (over $k$). We use induction on $n$. For $n=1$ we have $k[X_1]^{S_1} = k[X_1] = k[e_1^{(1)}]$.
+  
+  Assume the claim holds for $n-1 \ge 1$, but it does not hold for $n$. Then there exists a polynomial $0 \neq P \in k[t_1,\ldots,t_n]$ such that $P\pa{e_1^{(n)},\ldots,e_n^{(n)}}=0$. Let $P$ be of minimal possible degree. Then \[ 0 = q\pa{P\pa{e_1^{(n)},\ldots,e_n^{(n)}}} = P\pa{q\pa{e_1^{(n)}},\ldots,q\pa{e_n^{(n)}}} = P\pa{e_1^{(n-1)},\ldots,e_{n-1}^{(n-1)},0} \] and by induction hypothesis $X_n \mid P$.
+  
+  Therefore, there exists a $\hat p \in k[t_1,\ldots,t_n]$ such that $P = t_n \hat P$. In particular $\hat P \neq 0$ and $\deg \hat P < \deg P$. We have $0 = P\pa{e_1^{(n)},\ldots,e_n^{(n)}} = e_n^{(n)}\hat P \pa{e_1^{(n)},\ldots,e_n^{(n)}}$. Thus, $\hat P\pa{e_1^{(n)},\ldots,e_n^{(n)}} = 0$ since $e_n^{(n)} \neq 0$ and $P \mid 0$. This contradicts the minimality of $\deg P$.
+\end{proof}
+
+\paragraph{Remark.} The proof gives an algorithm how to express a symmetric polynomial $f$ in the $e_1^{(n)},\ldots,e_n^{(n)}$.
+
+\paragraph{Remark.} The proof and theorem also hold for $\IZ[X_1,\ldots,X_n]^{S_n}$.
+
+\bigskip
+
+To better understand the interaction ot the symmetric polynomials $e_r^{(n)}$, $p_r^{(n)}$ and $h_i^{(n)}$ we use \emph{generating series} in $k[X_1,\ldots,X_n]\llbracket t\rrbracket$. For fix $n\in \IZ_{>0}$ we define
+\begin{align*}
+  E(t) & := \sum_{r=0}^ne_r^{(n)}t^r, & H(t) & := \sum_{r\ge0}h_r^{(n)}t^r, & P(t) & := \sum_{r\ge 0} p_{r+1}^{(n)}t^r.
+\end{align*}
+
+\begin{lem} \label{lem:III.9}
+  \leavevmode
+  \begin{enumerate}
+    \item\label{lem:III.9:1} $\displaystyle E(t) = \prod_{i=1}^n (1+X_it)$
+    \item\label{lem:III.9:2} $\displaystyle H(t) = \prod_{i=1}^n\frac1{1-X_it}$
+    \item\label{lem:III.9:3} $\displaystyle P(t) = \sum_{i=1}^n \frac1{1-X_it}$
+  \end{enumerate}
+\end{lem}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[label=\ref{lem:III.9:\arabic*}]
+    \item Clear.
+    \item $1-X_it$ is invertible in $k[X_1,\ldots,X_n]\llbracket t\rrbracket$, namely with the inverse $Q_i(t) = \frac1{1-X_it} := 1+X_i+X_i^2t^2 + \ldots$. Then $ \prod_{i=1}^n \frac1{1-X_it} = Q_1(t)Q_2(t)\cdots Q_n(t)$. But here the coefficient of $t_j$ equals $h_j^{(n)}$.
+    \item Left to the reader. \qedhere
+  \end{enumerate}
+\end{proof}
+
+\begin{cor} \label{cor:III.10}
+  For all $s \ge 1$ we have \[ h_s^{(n)} - e_1^{(n)}h_{s-1}^{(n)} + e_2^{(n)}h_{s-2}^{(n)} - \ldots + (-1)^se_sh_0^{(n)} = 0. \] The same holds with $e$ and $h$ swapped.
+\end{cor}
+\begin{proof}
+  Left to the reader.
+\end{proof}
+
+\begin{cor}
+  For all $j\ge 1$ we have \[ jh_j^{(n)} = p_1^{(n)}h_{j-1}^{(n)} + p_2^{(n)}h_{j-2}^{(n)} + \ldots + p_{j-1}^{(n)}h_1^{(n)}+p_j^{(n)}h_0^{(n)}. \]
+\end{cor}
+\begin{proof}
+  Let $H^r(t)$ be the formal derivation of $H(t)$ with respect to $t$, so $H_r'(t) = \sum_{r\ge 0}rh_r^{(n)}t^{r-1}$. On the other hand (by \cref{lem:III.9}) \[ H'(t) = \sum_{i=1}^n\pa{\frac{X_i}{(1-X_it)^2}\prod_{j\neq i}\frac1{1-X_jt}} = \sum_{i=1}^n\frac{X_i}{1-X_it}\pa{\prod_{j=1}^n\frac1{1-X_jt}}. \] By comparing coefficients of $t^{r-1}$ we get \[ rh_r^{n} = \sum_{s=1}^rp_s^{(n)}h_{r-s}^{(n)} \] using \cref{lem:III.9} \ref{lem:III.9:2} and \ref{lem:III.9:3}.
+\end{proof}
+
+\lecture{October 22, 2018}
+
+\begin{cor}[Newton identities]
+  For all $r \ge 0$ one has \[ p_r^{(n)} - e_1^{(n)}p_{r-1}^{(n)} + \ldots + (-1)^re_r^{(n)}p_0^{(n)} = 0. \]
+\end{cor}
+\begin{proof}
+  Left to the reader.
+\end{proof}
+
+\begin{cor} \label{cor:III.12}
+  Let $k$ be a field or $k= \IZ$. There exist polynomials $F_1,\ldots,F_n \in k[t_1,\ldots,t_n]$ such that \[ h_j^{(n)} = F_j(e_1^{(n)},\ldots,e_n^{(n)}) \quad\text{und}\quad e_j^{(n)}=F_j\pa{h_1^{(n)},\ldots,h_n^{(n)}} =0 \] for all $1 \le j \le n$.
+\end{cor}
+\begin{proof}
+  We have $h_1^{(n)} = X_1 + \ldots+X_n = e_1^{(n)}$. Set $F_1(t_1,\ldots,t_n) = t_1$. Now assume $F_1,\ldots,F_{s-1}$ exist for $1\le s \le n$. Define \[ F_s := t_1F_{s-1}-t_2F_{s-2} + \ldots + (-1)^{s-2}t_{s-1} +(-1)^{s-1}t_s. \] By induction and \cref{cor:III.10} we get \[ F_s = e_1^{(n)}h_{s-1}^{(n)} - e_2^{(n)}h_{s-2}^{(n)} + \ldots +(-1)^{s-2}e_{s-1}^{(n)}h_1+(-1)^{s-1}e_s^{(n)}h_0^{(n)} = h_s^{(n)}. \]
+  By switching th ole of the $e$'s and $h$'s (using $e_1^{(n)} = h_1^{(n)}$) and \cref{cor:III.10} again gives $F_s\pa{h_1^{(n)},\ldots,h_n^{(n)}} = e_s^{(n)}$.
+\end{proof}
+
+\begin{thm} \label{thm:III.13}
+  Let $k$ be a field. Then there exists a unique algebra homomorphism 
+  \begin{eqnarray*}
+    \hat\Phi\colon k[X_1,\ldots,X_n]^{S_n} &\to& k[X_1,\ldots,X_n]^{S_n} \\
+    e_j^{(n)} &\mapsto& h_j^{(n)}
+  \end{eqnarray*}
+  for all $0 \le j \le n$. Moreover ${\hat\Phi}^2 = \id$ and so $\hat\Phi$ is an isomorphism.
+\end{thm}
+\begin{proof}
+  By the \namereff{thm:symmetric polys} we have an isomorphism of algebras
+  \begin{eqnarray*}
+    \Phi\colon k[X_1,\ldots,X_n]^{S_n} &\to& k[t_1,\ldots,t_n], \\
+    e_j^{(n)} &\mapsto& t_j.
+  \end{eqnarray*}
+  By the universal property of the polynomial ring we have a unique algebra homomorphism
+  \begin{eqnarray*}
+    \ol\Phi\colon k[t_1,\ldots,t_n] &\to& k[X_1,\ldots,X_n]^{S_n}, \\
+    t_j &\mapsto& h_j^{(n)}.
+  \end{eqnarray*}
+  Now set $\hat\Phi := \ol\Phi \circ \Phi$. This is an algebra homomorphism.
+  
+  We have to show that ${\hat\Phi}^2 = \id$. Since the $e_j^{(n)}$ generate $k[X_1,\ldots,X_n]^{S_n}$ as an algebra, it is enough to show that $\hat\Phi\pa{e_j^{(n)}} = h_j^{(n)}$ for all $0 \le j \le n$. By \cref{cor:III.12} and construction of $\hat\Phi$ we get \[ \hat\Phi\pa{h_j^{(n)}} = \hat\Phi\pa{F_j\pa{e_1^{(n)},\ldots,e_n^{(n)}}} = F_j\pa{\hat\Phi\pa{e_1^{(n)}},\ldots,\hat\Phi\pa{e_n^{(n)}}} = F_j\pa{h_1^{(n)},\ldots,h_n^{(n)}} = e_j^{(n)} \] for all $0 \le j \le n$.
+\end{proof}
+
+\begin{thm} \label{thm:III.14}
+  Let $k$ be a field with $\chr k=0$ or $\chr k>n$. Then the $p_1^{(n)},\ldots,p_n^{(n)}$ generate $k[X_1,\ldots,X_n]^{S_n}$ as a $k$-algebra and they are algebraically independent over $k$.
+\end{thm}
+\begin{proof}
+  Left to the reader.
+\end{proof}
+
+\paragraph{Remark.}
+\cref{thm:III.14} does not hold over $\IZ$. Consider $\IQ[X_1,X_2]^{S_2}$. There we have $e_2^{(2)} = \frac12\pa{\pa{p_1^{(2)}}^2-p_2^{(2)}}$, as one has $(X_1+X_2)^2 - (X_1^2 + X_2^2) = 2X_1X_2$. If the theorem holds for $k=\IZ$ then there exists an $F \in \IZ[t_1,t_2]$ such that $F\pa{p_1^{(2)},p_2^{(2)}} = e_2^{(n)}$. Viewed as a polynomial in $\IQ[t_1,t_2]$ we have $\frac12t_1^2-\frac12t_2-F(t_1,t_2) = G(t_1,t_2)$. It satisfies $G\pa{p_1^{(2)},p_2^{(2)}} = 0$. This implies $G = 0$ because $p_1^{(2)}$ and $p_2^{(2)}$ are algebraically independent over $IQ$. But this contradicts $F \in \IZ[t_1,t_2]$.
+
+\bigskip
+
+We want to find a basis of $k[X_1,\ldots,X_n]^{S_n}$. This is another natural occurence of power series.
+
+\begin{deff}
+  Let $A = \bigoplus_{i\in\IZ}A_i$ be a graded algebra. Assume $A_i = 0$ for $i<0$ (\emph{non-negatively graded}) and $\dim A_i <\infty$ for all $i \in \IZ$. Then define the \emph{Hilbert series} \[ P_A(t) = \sum_{i\ge 0} (\dim A_i)t^i \in \IN_0\llbracket t \rrbracket \] (in particular, if $\dim A < \infty$, we have $P_A(t) \in \IN_0[t]$).
+\end{deff}
+
+\paragraph{Examples.}
+\begin{enumerate}
+  \setcounter{enumi}{-1}
+  \item\label{ex:hs:1} For $k$ a field let $A = k[t]$ with standard grading $\bigoplus_{i\ge0}\gen{t^i}$. Then we get \[ P_A(t) = 1+t+t^2+\ldots = \frac1{1-t}. \] (Note that $P_A(t)$ is not defined for the \enquote{stupid} grading.)
+  \item If $A=\bigoplus_{i\in\IZ}$ and $B = \bigoplus_{i\in\IZ}B_i$ are non-negatively graded algebras with $\dim A< \infty>\dim B$ and $\dim A_i <\infty>\dim B_i$ for all $i \in \IZ$. Then $A \tp B$ is an algebra, even a graded ring via \[ A \tp B = \bigoplus_{i\in \IZ} (A\tp B)_i \quad\text{where}\quad (A\tp B)_i = 
+  \begin{cases*}
+    0 & if $i < 0$, \\
+    \bigoplus_{r=0}^i A_r \tp B_{i-r} & \text{otherwise}.
+  \end{cases*}
+  \]
+  
+  It is clear that the $(A\tp B)_i \subseteq A\tp B$ are vetorspaces and $\bigoplus_{i\in\IZ}(A\tp B)_i = A\tp B$ by choosing a homogeneous basis of $A$ and $B$.
+  
+  We have to check that $(A \tp B)_i(A\tp B)_j \subseteq (A\tp B)_{i+j}$ for all $i,j \in \IZ$. We can assume $i,j \ge 0$ and check the property on a basis. We have \[\underbrace{(a \tp b)}_{\mathclap{\in A_i\tp B_{i-r} \subseteq (A \tp B)_i}}\overbrace{(c \tp d)}^{\mathllap{\in A_s \tp B_{j-2}\subseteq (A \tp B)_j}} = \underbrace{ac}_{\mathclap{\in A_iA_s \subseteq A_{i+s}}} \tp \overbrace{bd}^{\mathclap{\in B_{i-r}B_{j-s} \subseteq B_{i+j-r-s}}}, \] and we get $ac \tp bd \in A_{i+s}\tp B_{i+j-(r+s)} \subseteq (A \tp B)_{i+j}$. Thus, $A\tp B$ is a non-negatively graded ring. We have $\dim(A \tp B)_i = \sum_{r=0}^i\dim A_r \dim B_{i-r}$, which results in \[ P_{A \tp B}(t) = P_A(t)P_B(t). \]
+  
+  We now consider the special case $A = k[X_1,\ldots,X_n]$ with standard grading. There is an isomorphism of algebras
+  \begin{equation*}
+  \begin{aligned}
+    A \;\;&\cong&& k[t_1] \tp k[t_2] \tp \ldots \tp k[t_n], \\
+    X_1^{a_1}X_2^{a_2}\cdots X_n^{a_n} \;\;&\mapsfrom&& t_1^{a_1}\tp t_2^{a_2}\tp \ldots\tp t_n^{a_n}.
+  \end{aligned} \tag{*}\label{ex:blub}
+  \end{equation*}
+  Thus $P_A(t) = P_{k[t_1]}(t)\cdots P_{k[t_n]}(t)$ with the standard grading on $k[t_i]$. (Note that \eqref{ex:blub} becomes a graded algebra isomorphism.) Hence \[ P_A(t) = (1+t+t^2+\ldots)(1+t+t^2+\ldots)\cdots(1+t+t^2+\ldots) = \prod_{i=1}^n\frac1{1-t}. \]
+  Then \[ P_A(t) = \sum_{j\ge 0}\binom{n+j+1}{n-1} t^j \] where the binomial coefficient counts all the ways o create $t^j$ from the $r$ factors. We want the number of tuples $(j_1,\ldots,j_n) \in \IZ_{\ge 0}^n$ with $j_1+\ldots+j_n = j$. We can think of this by choosing $n-1$ points as \enquote{barriers} out of $n+j-1$ points.
+  
+  For $n=1$, we have $\binom{n+j-1}0 = 1$, see \ref{ex:hs:1}. For $n=2$, $\binom{j+1}j$ is the number of monomials.
+  \item By the \namereff{thm:symmetric polys} we have an isomorphism of algebras \[ \Phi\colon k[X_1,\ldots,X_n] \cong k[t_1,\ldots,t_n],\] but this is not an isomorphism of graded algebras if we choose the standard gradings on $k[X_1,\ldots,X_n]$ and $k[t_1,\ldots,t_n ]$.
+  
+  Define a grading on $k[t_1,\ldots,t_n]$ by $k[t_1,\ldots,t_n]_i := \Phi\pa{k[X_1,\ldots,X_n]^{S_n}}$. Because $\Phi$ is an isomorphism of algebras (in particular of vector spaces) we have \[A = k[t_1,\ldots,t_n] = \bigoplus_{i\ge0} k[t_1,\ldots,t_n]_i.\]
+  We want to calculate $P_A(t)$ with this grading.
+  
+  We have \[ k[t_1,\ldots,t_n] \cong k[t_1] \tp k[t_2] \tp \ldots \tp k[t_n] \] as algebras and as graded algebras by setting $t_i \in k[t_i]$ in degree $i$ (since $t_j$ corresponds to $e_j^{(n)}$ which has degree $j$). Therefore \[ P_A(t) = \underbrace{(1+t+t^2+\ldots)}_{\text{$t_1$ is of degree $1$}}\underbrace{(1+t^2+t^4+\ldots)}_{\text{$t_2$ is of degree $2$}}\cdots \underbrace{(1+t^n+t^{2n}+\ldots)}_{\text{$t_n$ is of degree $n$}} = \prod_{j=1}^n\frac1{1-t^j}. \]
+  We now focus on how to express the coefficient of $t^j$ in $P_A(t)$ explicitly. The coefficient of $t_j$ equals the number of tuples $(a_1,\ldots,a_n)\in \IZ_{\ge0}^n$ satisfying $1a_1+2a_2+\ldots+na_n = j$.
+  
+  For visualization, consider the following Young diagram consisting of $j$ squares.
+  \begin{center}
+    \ytableausetup{mathmode, boxsize=0.6cm}
+    \begin{ytableau}
+      a_n & a_n & a_n &a_n & \none[\dots]
+      & a_n \\
+      a_n & a_n & a_n & a_n&\none[\dots]
+      & a_n \\
+      \none[\vdots] & \none[\vdots]
+      & \none[\vdots] \\ % TODO: ugly dots
+      a_2 & a_2 \\
+      a_2 & a_2 \\
+      a_1 \\
+      a_1 \\
+      a_1
+    \end{ytableau}
+  \end{center}
+  In this example, we have $a_1 = 3$, $a_2 = 2$ and $a_n = 2$.
+\end{enumerate}
+
+\begin{deff}
+  For $d \in \IN$ a sequence $\lambda = (\lambda_1\ge \lambda_2\ge\ldots)$ with $\lambda_i \in \IZ_{\ge0}$ is a \emph{partition} of $d$ if $\sum_{i=1}^\infty \lambda_i = d$. We write $\abs \lambda := \sum_{i=1}^\infty$ and let $l(\lambda)$ be maximal such that $\lambda_i \neq 0$ and call it the \emph{length} of $\lambda$. We set \[ \Par(d) := \set{\text{partitions of $d$}} \quad\text{und}\quad \Par := \bigcup_{d \ge 0}\Par(d).\]
+\end{deff}
+\begin{deff}
+  Define a partial ordering on $\Par$ by setting $\lambda \le \mu$ for $\lambda,\mu \in \Par$ if we have \[ \sum_{i=1}^r \lambda_i \le \sum_{i=1}^r\mu_i \] for all $r \ge 0$.
+\end{deff}
+\begin{deff}
+  For $\lambda \in \Par$ we define the following elements in $k[X_1,\ldots,X_n]^{S_n}$.
+  \begin{align*}
+    e_\lambda^{(n)} &:= e_{\lambda_1}^{(n)}e_{\lambda_2}^{(n)}\cdots  \tag{$\lambda_1 \le n$} \\
+    h_\lambda^{(n)} &:= h_{\lambda_1}^{(n)}h_{\lambda_2}^{(n)}\cdots \\
+    p_\lambda^{(n)} &:= p_{\lambda_1}^{(n)}p_{\lambda_2}^{(n)}\cdots \\
+    m_\lambda^{(n)} &:= \sum_{\mathclap{g \in S_n}}X_{g(1)}^{\lambda_1}X_{g(2)}^{\lambda_2}\cdots X_{g(n)}^{\lambda_n} \tag{$l(\lambda)\le n$}
+  \end{align*}
+  They are all homogeneous of degree $\abs\lambda$.
+\end{deff}
+
+\lecture{October 25, 2018}
+
+\begin{deff}
+  For $\lambda\in\Par$ let $\lambda^t$ be the \emph{transposed partition} given by $\lambda_i^t = \abs{\set{j \given \lambda_j = i }}$. In this case, the young diagram is \enquote{flipped}. % TODO tolles Bild hierfür?
+\end{deff}
+
+\begin{thm}
+  The $\set*{e_\lambda^{(n)}}$ and $\set*{h_\lambda^{(n)}}$ for $\lambda \in \Par$ with $\lambda_i \le n$ form a $k$-vector space of $k[X_1,\ldots,X_n]^{S_n}$ for $k$ any field or $k= \IZ$. Moreover $\set*{m_\lambda^{(n)}}$ for $\lambda \in \Par$ with $l(\lambda) \le n$ is also basis.
+\end{thm}
+\begin{proof}
+  By the \namereff{thm:symmetric polys} the monomials in the $e_j^{(n)}$'s are linearly independent, because the $e_j^{(n)}$'s are algebraically independent. Moreover, they generate as a vector space because the $e_j^{(n)}$'s generate as an algebra. Thus, the $\set*{e_\lambda^{(n)}}$ with $\lambda \in \Par$ and $\lambda_i \le n$ form a basis. Then the $\set*{h_\lambda^{(n)}}$ form a basis by applying the transformation of \cref{thm:III.13}.
+  
+  In $ e_\lambda^{(n)} = e_{\lambda_1}^{(n)}e_{\lambda_2}^{(n)}\cdots e_{\lambda_{l(\lambda)}}^{(n)} $ the maximum possible degree of $\lambda_2$ is $\lambda_2^t$ etc. In fact we have \[ e_\lambda^{(n)} = m_{\lambda^t}^{(n)} + \sum_{\mu \le \lambda^t} m_{\mu_t}^{(n)}. \] Therefore the $m_{\lambda^t}^{(n)}$ with $\lambda_i^t \le n$ form a basis, since the $e_\lambda^{(n)}$ with $\lambda_i \le n$ do. As one has $\set{\lambda \in \Par \given \lambda_i \le n} = \set{\lambda \in \Par \given l(\lambda^t) \le n}$ the $m_\lambda^{(n)}$ for $\lambda \in \Par$ with $l(\lambda) \le n$ form a basis.
+\end{proof}
+
+\subsection{Polynomial maps}
+In this section $k$ is an infinite field, $V$ a finite-dimensional $k$-vector space and $v_1,\ldots,v_n$ a basis of $V$.
+
+\begin{deff}
+  We set $\Ps_k(V) = \set{f\colon V \to k \given \text{$f$ polynomial}}$ where $f$ is \emph{polynomial} if \[f\pa{\sum_{i=1}^n\alpha_iv_i} = p(\alpha_1,\ldots,\alpha_n)\] for some polynomial $p \in k[t_1,\ldots,t_n]$.
+\end{deff}
+
+\paragraph{Remark.}
+\begin{itemize}
+  \item Clearly $\Ps_k(V)$ is a $k$-vector space with pointwise addition and scalar multiplication.
+  \item The property \enquote{polynomial} does not depend on the choice of a basis.
+  \begin{proof}
+    Let $w_1,\ldots,w_n$ be a basis of $V$ and $w_j = \sum_{i=1}^n \beta_{ij} v_i$. Then we get \begin{align*} f\pa{\sum_{j=1}^n\alpha_jw_j} &= f\pa{\sum_{j=1}^n\alpha_j \sum_{i=1}^n\beta_{ij}v_i} = f\pa{\sum_{i=1}^n \sum_{j=1}^n\alpha_j\beta_{ij}v_i} \\ &= p\pa{\sum_{j=1}^n\alpha_j\beta_{1j},\ldots,\sum_{j=1}^n\alpha_j\beta_{nj}} \end{align*} for some $p \in k[t_1,\ldots,t_n]$ as $f$ is polynomial. But the last expression depends polynomial on $\alpha_1,\ldots,\alpha_n$; it equals $p'(\alpha_1,\ldots,\alpha_n)$ for some polynomial $p'$.
+  \end{proof}
+\end{itemize}
+
+\begin{lem}
+  Let $W \subseteq V$ be a vector subspace. If $f \in \Ps_k(V)$ we get $f|_W \in \Ps_k(W)$.
+\end{lem}
+\begin{proof}
+  We choose a basis $w_1,\ldots,w_m$ of $W$ and extend it to a basis $w_1,\ldots,w_n$ of $V$. Now $f\pa{\sum_{i=1}^m \alpha_1w_1} = p(\alpha_1,\ldots,\alpha_m,0,\ldots,0)$ for some $p\in k[X_1,\ldots,X_n]$ as $f \in \Ps_k(V)$. Consider the image $\tilde p$ of $p$ under the canonical map \[k[X_1,\ldots,X_n] \to \fak{k[X_1,\ldots,X_n]}{(X_{m+1},\ldots,X_n)} \cong k[X_1,\ldots,X_m].\] Then by construction $f\pa{\sum_{i=1}^m\alpha_iw_i} = \tilde p(\alpha_1,\ldots,\alpha_m)$ with $\tilde p \in k[X_1,\ldots,X_m]$.
+\end{proof}
+
+\begin{deff}
+  For $f,g \in \Ps_k(V)$ define $fg$ as $(fg)(v) = f(v)g(v)$ for all $v \in V$. This turns $\Ps_k(V)$ into a $k$-algebra.
+\end{deff}
+
+\begin{thm} \label{thm:III.17}
+  There is an isomorphism of $k$-algebras
+  \begin{eqnarray*}
+    k[X_1,\ldots,X_n] &\to& \Ps_k(V), \\
+    p &\mapsto& f_p = \pa{ \sum_{i=1}^n\alpha_iv_i \mapsto p(\alpha_1,\ldots,\alpha_n)}.
+  \end{eqnarray*}
+\end{thm}
+\begin{proof}
+  Define for $1\le j \le n$ the $j$-th \emph{coordinate function} $\phi_j\colon V \to k$ by $\phi_j\pa{\sum_{i=1}^n\alpha_iv_i} = \alpha_j$. Obviously we have $\phi_j \in \Ps_k(V)$. By the universal property of the polynomial algebra $k[X_1,\ldots,X_n]$ there exists a unique algebra homomorphism
+  \begin{eqnarray*}
+    \beta\colon k[X_1,\ldots,X_n] &\to& \Ps_k(V), \\
+    X_j &\mapsto& \phi_j.
+  \end{eqnarray*}
+  Then $\beta(X_1^{a_1}\cdots X_n^{a_n})(v) = (\phi_1^{a_1}\cdots\phi_n^{a_n})(v)$. By the definition of multiplication $\Ps_k(V)$ one gets $(\phi_1^{a_1}\cdots\phi_n^{a_n})\pa{\sum_{i=1}^n\alpha_iv_i} = \alpha_1^{a_1}\cdots\alpha_n^{a_n}$. Thus $\beta$ sends $p$ to $f_p$.
+
+  By definition $\beta $ is surjective. Now assume $\beta(p) = 0$. Then $f_p\pa{\sum_{i=1}^n\alpha_iv_i} = 0$ for all $(\alpha_1,\ldots,\alpha_n)\in k^n$, hence $p(\alpha_1,\ldots,\alpha_n) = 0$ for all $(\alpha_1,\ldots,\alpha_n) \in k^n$. As $k$ is infinite we get $p=0$. Therefore $\beta$ is an isomorphism.
+\end{proof}
+
+\paragraph{Remark.}
+The theorem does not hold for finite fields in general. For example, take $p(t) = t^2+t \in \IF_2[t]$. In this case we have $p(1) = 1+1 = 0 = 0+0 = p(0)$, so $p(\lambda) = 0$ for all $\lambda\in\IF_2$, but $p\neq 0$. Therefore the $\beta$ in the proof does not have to be injective.
+
+\addtocounter{thmcounter}{1}
+\paragraph{Remark \Roman{section}.\arabic{thmcounter}.}
+At this point Professor Stroppel seems to have skipped a number in her notes.
+
+\begin{deff}
+  $f\in \Ps_k(V)$ is \emph{homogeneous} of degree $d$ if $f(\lambda v) = \lambda^df(v)$ for all $\lambda \in k$ and $v\in V$.
+\end{deff}
+
+\begin{prop} \label{prop:III.19}
+  We have \[ \Ps_k(v) = \bigoplus_{d\ge0}{\Ps_k(V)}_d \quad\text{where}\quad {\Ps_k(V)}_d = \set{f\in \Ps_k \given \text{$f$ is homogeneous of degree $d$}} \] and $\Ps_k(V)$ becomes a non-negatively graded algebra.
+\end{prop}
+\begin{proof}
+  Clearly ${\Ps_k(V)}_d \cap {\Ps_k(V)}_{d'} = 0$ if $d \neq d'$, as otherwise we have $\lambda^df(v) = f(\lambda v) = \lambda^{d'}f(v)$, or $\lambda^d - \lambda^{d'}=0$ for all $\lambda \in k$ and $v \in V$. But $t^d -t^{d'}$ only has finitely many roots which contradicts the infinity of $k$. We get $\bigoplus_{d\ge0}{\Ps_k(V)}_d \subseteq \Ps_k(V)$ via the isomorphism $\beta $ from \cref{thm:III.17} which maps a monomial $p = X_1^{a_1}\cdots X_n^{a_n} \in k[X_1,\ldots,X_n]$ to $f_p$ with $f_p\pa{\sum_{i=1}^n\lambda_iv_i} = p(\lambda_1,\lambda_n)$. Then $f_p(\lambda v) = p(\lambda\lambda_1,\ldots,\lambda\lambda_n) = \lambda^{a_1+\ldots+a_n}p(\lambda_1,\ldots,\lambda_n)$. Hence $f_p$ is homogeneous of degree $d = a_1+\dots+a_n$. Hence \begin{align*} \beta(k[X_1,\ldots,X_n]) &= \beta\pa{\bigoplus_{d\ge 0} k[X_1,\ldots,X_n]_d} = \bigoplus_{d\ge 0}\beta\pa{k[X_1,\ldots,X_n]_d} \\ &\subseteq \bigoplus_{d\ge0}{\Ps_k(V)}_d \subseteq \Ps(V). \end{align*} But \cref{thm:III.17} gives that $\im \beta = \Ps_k(V)$, hence $\bigoplus_{d\ge0}{\Ps_k(V)}_d = \Ps_k(v)$. Altogether $\beta$ is an isomorphism of graded algebras.
+\end{proof}
+
+\begin{deff}
+  Let $W$ be a $k$-vector space. $f\colon W\to V$ is \emph{polynomial} if the functions $f_i\colon W \to k$ defined by \[f(w) = \sum_{i=1}^nf_i(w)v_i \] are polynomial. Denote $\Ps_k(W,V) := \set{f\colon W\to V \given\text{$f$ polynomial}}$.
+\end{deff}
+
+\paragraph{Remark.}
+The property is independent of the choice of a basis. Let $w_1,\ldots,w_n$ be a basis of $V$ and $w_i = \sum_{j=1}^n\alpha_{ij}v_j$. Then we have for $w \in W$ \[ f(w) = \sum_{i=1}^n f_i(w) w_i = \sum_{i=1}^n\sum_{j=1}^n f_i(w)\alpha_{ji}v_j. \]
+If $f$ is polynomial in the $w_i$ then it is also polynomial in the $v_i$.
+
+\paragraph{Remark.}
+Consider the special case $V=k$. Then $f\colon W \to V = k$ is polynomial iff $f \in \Ps_k(W)$.
+
+\begin{lem} \label{lem:III.20}
+  Finite dimensional maps together with polynomial maps form a category.
+\end{lem}
+\begin{proof}
+  Left to the reader.
+\end{proof}
+
+\begin{lem}
+  $\Ps_k(W,V)$ for $W$ a finite-dimensional $k$-vector space is a $\Ps_k(W)$-module via \[ (f.g)(w) = f(w)g(w)  \] for all $w \in W$ for $f\in \Ps_k(W) $ and $g\in \Ps_k(W,V)$.
+\end{lem}
+\begin{proof}
+  Clearly $\Maps(W,V)$ is a $\Maps(W,k)$-module via the same rule. We have to check that $\Ps_k(W,V)$ is preserved under the action of $\Ps_k(W) \subseteq \Maps(W,k)$. So let $f \in \Ps_k(W)$ and $g\in\Ps_k(W,V)$ and let $w_1,\ldots,w_m$ be a basis of $W$. Then
+  \begin{align*}
+    (fg)\pa{\sum_{i=1}^m\lambda_iw_i} &= f\pa{\sum_{i=1}^m\lambda_iw_i}g\pa{\sum_{i=1}^m\lambda_iw_i} = \sum_{j=1}^m p(\lambda_1,\ldots,\lambda_m) g_j\pa{\sum_{i=1}^m\lambda_iw_i}v_j \\
+    &= \sum_{j=1}^m\underbrace{p(\lambda_1,\ldots,\lambda_m)q_j(\lambda_1,\ldots,\lambda_m)}_{=: (fg)_j\pa{\sum_{i=1}^m\lambda_iw_i}}v_j = \sum_{j=1}^m (fg)_j\pa{\sum_{i=1}^m\lambda_iw_i} v_j
+  \end{align*}
+  for some $p,q_1,\ldots,q_m \in k[X_1,\ldots,X_m]$ as $f$ and the $g_j$ are polynomial. As the $(fg)_j$ are polynomial in $\lambda_1,\ldots,\lambda_n$ we are done.
+\end{proof}
+
+\begin{prop} \label{prop:III.22}
+  For $f \in \Ps_k(W,V)$ define $f^*\colon \Ps_k(V) \to \Ps_k(W)$ by $f^*(h) = h \circ f$, the \emph{comorphism attached to $f$}. $f^*$ is an algebra homomorphism.
+\end{prop}
+\begin{proof}
+  For $f\in \Ps_k(W,V)$ and $h\in \Ps_k(V)$ we have $h\circ f\in\Ps_k(W)$ by \cref{lem:III.20}. For $h_1,h_2,h \in  \Ps_k(V)$, $\lambda\in k$ and $w\in W$ we get
+  \begin{align*}
+    (f^*(h_1+h_2))(w) &= (h_1+h_2)(f(w)) = h_1(f(w)) + h_2(f(w)) \\
+    &= (f^*(h_1))(w) + (f^*(h_2))(w) = (f^*(h_1) + f^*(h_2))(w) \\
+    \intertext{and}
+    (f^*(\lambda h))(w) &= (\lambda h)(f(w)) = \lambda h (f(w)) = \lambda (f^*(h))(w) = ((\lambda f^*)(h))(w).
+  \end{align*}
+  Thus $f^*$ is linear. One easily checks that $f^*(h_1h_2) = f^*(h_1)f^*(h_2)$. Altogether $f^*$ is an algebra homomorphism.
+\end{proof}
+
+\lecture{October 29, 2018}
+
+\begin{prop} \label{prop:III.23}
+  There is a (contravariant) functor
+  \begin{eqnarray*}
+    F\colon \Pol_k := \set*{\substack{\text{finite-dimensional $k$-vector spaces}\\\text{with polynomial maps}}} &\to& \set*{\substack{\text{$k$-algebras with}\\\text{algebra homomorphisms}}}^{\op} := \Alg_k^{\op}, \\
+    W &\mapsto& \Ps_k(W), \\
+    f\in \Ps_k(W,V) &\mapsto& f^*\colon \Ps_k(V) \to \Ps_k(W).
+  \end{eqnarray*}
+\end{prop}
+\begin{proof}
+  We know that $\Ps_k(W)$ is a $k$-algebra and $f^*$ an algebra homomorphism by \cref{prop:III.22}. By definition we have $\id_W \mapsto \id_W^* = \id_{\Ps_k(W)}$. Finally we get for $f_1 \in \Ps_k(W,V)$, $f2 \in \Ps_k(Z,W)$ and $h\in \Ps_k(V)$ \[ (f_1 \circ f_2)^*(h) = (f_2^* \circ f_1^*)(h) = (h \circ f_1) \circ f_2 = h \circ (f_1 \circ f_2) = (f_1 \circ f_2)^*(h). \qedhere \]
+\end{proof}
+
+\begin{thm}
+  The functor $F$ from \cref{prop:III.23} is fully faithful, i.e. the map
+  \begin{eqnarray*}
+    \Omega\colon \Ps_k(W,V) &\to& \Hom_{\Alg_k}(\Ps_k(V),\Ps_k(W))\\
+    f &\mapsto& f^*
+  \end{eqnarray*}
+  is an isomorphism of $k$-vector spaces for all finite-dimensional $k$-vector spaces $V$ and $W$.
+\end{thm}
+\begin{proof}
+  Clearly $\Omega$ is lineary. We have to show that it is invertible.
+  
+  Let $v_1,\ldots,v_n$ be a basis of $V$ and consider the isomorphism of algebras
+  \begin{eqnarray*}
+    \beta\colon k[X_1,\ldots,X_n] &\to& \Ps_k(V) \\
+    x_j &\mapsto& \phi_j.
+  \end{eqnarray*}
+  By the universal property of the polynomial algebra we have
+  \begin{eqnarray*}
+    \Psi\colon \Ps_k(W)^{\oplus n} &\to& \Hom_{\Alg_k}(k[X_1,\ldots,X_n], \Ps_k(w)) \\
+    (f_1,\ldots,f_n) &\mapsto& \Psi(f) := (X_j \mapsto f_j).
+  \end{eqnarray*}
+  On the other hand we have
+  \begin{eqnarray*}
+    \Phi\colon \Ps_k(W)^{\oplus n} &\to& \Ps_k(W,V) \\
+    (f_1,\ldots,f_n) &\mapsto& f := {w \mapsto \sum_{i=1}^nf_i(w)w_i} \\
+    (f_1,\ldots,f_n) &\mapsfrom& f = {w \mapsto \sum_{i=1}^nf_i(w)w_i}.
+  \end{eqnarray*}
+  As these maps are inverse $\Phi$ is a bijection. Again let $f\in \P_k(W,V)$, $w\in W$ and $f(w) = \sum_{i=1}^nf_i(w)w_i$. Then $f^*(\phi_j)(w) = (\phi_j \circ f)(w) = \phi_j(f(w)) = f_i(w)$, or $f^*(\phi_j) = f_j$ for alle $1\le j\le n$. Therefore by definition \[\Omega(\Psi(f_1,\ldots,f_n)) = \Omega(f) = f^* = \Psi(f_1,\ldots,f_n) \circ \beta^{-1}\] because $f^*(\phi_j) = \Psi(f_1,\ldots,f_n)(\beta^{-1}(\phi_j)$ for all $1\le j \le n$ (and $f^*$ is an algebra homomorphism, hence defined by the $f^*(\phi_j)$).
+  
+  Now $\Psi$ is invertible, and so is $\Omega \circ \Phi$ and finally $\Omega$.
+\end{proof}
+
+\subsection{Covariants}
+Let $k$ be a field of infinite cardinality.
+
+\paragraph{Remark.}
+Let $\pi\colon W \to V$ be a linear map of finite-dimensional $k$-vector spaces. Then $\pi \in \Ps_k(W,V)$ is homogeneous of degree $1$. To see this choose bases $v_1,\ldots,v_n$ and $w_1,\ldots,w_m$ of $V$ and $W$, respectively. Now we get \[\pi\pa{\sum_{j=1}^m \lambda_jw_j} = \sum_{j=1}^m\lambda_j\underbrace{\pi(w_j)}_{\mathclap{\sum_{i=1}^n\beta_{ij}v_i}} = \sum_{i=1}^n\underbrace{\pa{\sum_{j=1}^m\beta_{ij}\lambda_j}}_{\mathclap{\text{polynomial in $\lambda_1,\ldots,\lambda_m$}}}v_i.\]
+
+Let $G$ be a group and $V$ a finite-dimensional representation of $G$. Then $\Ps_k(V)$ is a representation of $G$ via \[ (g.f)(v) = f(g^{-1}.v) \] for all $g\in G$, $f\in\Ps_k(V)$ and $v \in V$.
+We have to show that $g.f$ is again in $\Ps_k(V)$ (the rest is clear, since $V$ is a representation). Now $g .f = f \circ \pi_{g^{-1}}$ is a composition of polynomial maps and therefore by \cref{lem:III.20} polynomial.
+
+\begin{deff}
+  Let $G$ be a group and $V,W$ finite-dimensional representations of $G$ (over $k$). A map $f\colon W \to V$ is \emph{covariant} if it is polynomial and $G$-equivariant. Denote $\Cov_k(W,V) = \Cov(W,V) := \set{f\colon W \to V \given \text{$f$ covariant}}$. 
+\end{deff}
+
+\begin{enumerate}
+  \setcounter{enumi}{-1}
+  \item If $f\in \Hom_G(W,V)$ we have $f \in \Cov(W,V)$.
+  \item Let $V$ be a finite-dimensional representation of $G$. Then $f \colon V \to V^{\tp d}$ given by $f(x) = x^{\tp d}$ is covariant and homogeneous of degree $d$ because \[ f\pa{\sum_{i=1}^n\lambda_iw_i} = \pa{\sum_{i=1}^n\lambda_iw_i}^{\tp d} = \sum_{{\substack{I=(i_1,\ldots,i_d)\\\in \set{1,\ldots,n}^d}}} \underbrace{\prod_{i\in I}\lambda_i}_{\lambda_I} \underbrace{\bigotimes_{i\in I} v_i}_{v_I}. \]
+  Note that $\set*{v_i \given I \in \set{1,\ldots,n}^d}$ forms a basis of $V^{\tp d}$. Definite $p_I\in k[t_1,\ldots,t_n]$ by $p_I(t_1,\ldots,t_n) = t_1^{a_1}\cdots t_d^{a_d}$ where $a_k = \abs{\set{j \given i_j = h}}$. Then $p_I(\lambda_1,\ldots,\lambda_n) = \lambda_I$ and $f$ is polynomial. $f$ is $G$-equivariant since $f(g.v) = (g.v)^{\tp d} = g.v^{\tp d}$. Thus $f$ is covariant.
+  \item Let $V = \Mat n k$ and $G = \GL_n(k)$ act on $V$ by conjugation. Then
+  \begin{eqnarray*}
+   f_m \colon V &\to& V \\ A &\mapsto& A^m
+  \end{eqnarray*}
+  is covariant for all $m\ge 1$.
+\end{enumerate}
+
+\begin{lem}
+  Let $V,W$ be finite-dimensional representations of a group $G$. Then $f \colon W \to V$ is covariant if and only if $f^* \colon \Ps_k(V) \to \Ps_k(W)$ is $G$-invariant.
+\end{lem}
+Note: The action of $G$ on $\Hom_{\Alg_k}(\Ps_k(V), \Ps_k(W))$ is given by $(g.h)(\phi) = g.(h(g^{-1}.\phi))$ for all $g \in G$, $h \in \Hom_{\Alg_k}(\Ps_k(V), \Ps_k(W))$ and $\phi\in \Ps_k(v)$.
+\begin{proof}
+  Left to the reader.
+\end{proof}
+
+\begin{prop}
+  Let $V,W$ be finite-dimensional representations of a group $G$ and $f \in \Cov_k(W,V)$. Then \[ f^*\pa{\Ps_k(V)^G} \subseteq \Ps_k(W)^G. \]
+\end{prop}
+\begin{proof}
+  Let $h \in \Ps_k(V)^G$ and $g \in G$. For all $w \in W$ we have
+  \begin{align*}
+    (g.f^*(h))(w) &= (g.(h\circ f))(w) = (h\circ f)(g^{-1}.w) = h(f(g^{-1}.w)) = h(g^{-1}.f(w)) \\
+    &= (g.h)(f(w)) = h(f(w)) = (f^*(h))(w). \qedhereb
+  \end{align*}
+\end{proof}
+
+\begin{prop}
+  Let $V,W$ be finite-dimensional $k$-vector spaces. The $\Ps_k(W)$-module structure on $\Ps_k(W,V)$ induces a $\Ps_k(W)^G$-module structure on $\Cov(W,V)$ if $V,W$ are representations of $G$ by restriction.
+\end{prop}
+\begin{proof}
+  $\Ps_k(W)^G$ is a subring of $\Ps_k(W)$, and by \cref{lem:I.8} even a subalgebra. Let $f\in\Cov(W,V)$, $h\in \Ps_k(W)^G$, $g\in G$ and $w\in W$. Then we have
+  \begin{align*}
+    (h.f)(g.w) &= h(g.w)f(g.w) = h(w)f(g.w) = h(w)(g.f(w)) = g.(h(w)f(v)) \\ &= g.(h.f)(w),
+  \end{align*}
+  and hence $h.f$ is $G$-equivariant.
+\end{proof}
+
+
+\section{Invariants of matrix actions}
+Let $k$ be a field of infinite cardinality.
+
+\begin{thm}[Invariant Theorem I] \label{thm:inv thm I}
+  Let $G = \SL_n(k)$ act on $\Mat n k$ by left multiplication. Then \[\det\colon \Mat n k \to k \] generates $\Ps_k(\Mat n k)^G$ as a $k$-algebra and it is algebraically independent, i.e.
+  \begin{eqnarray*}
+    k[t] &\to& \Ps_k(\Mat n k)^G \\
+    t &\mapsto& \det
+  \end{eqnarray*}
+  is an isomorphism of $k$-algebras.
+\end{thm}
+\begin{proof}
+  Obviously, $\det$ is polynomial. It is also $G$-invariant, as we have $(S .\det)(A) = \det(S^{-1}A) = \det A$ for all $S \in G$ and $A \in \Mat n k$.
+  
+  We have to prove that $\det$ is algebraically independent. Let $p \in k[t]$ with $p(\det) = 0$. We get $(p(\det))(A) = p(\det(A)) = 0$ for all $A \in \Mat n k$. Thus, $p(\lambda) = 0$ for all $\lambda \in k$ because $\det$ is surjective. But this implies $p=0$ as $k$ is of infinite cardinality.
+  
+  It is left to show that $\det$ generates $\Ps_k(\Mat n k)^G$ as an algebra. Let $f \in \Ps_k(\Mat n k)^G$. Since $f$ is polynomial there exists a $p \in k[t_{11},\ldots,t_{nn}]$ such that $f(A) = p(a_{11},\ldots,a_{nn})$ for all $A = \sum_{1\le i,j \le n} a_{ij}E_{ij}$ using a basis $E_{ij}$ ($1\le i,j\le n$).
+  
+  Consider the algebra homomorphism
+  \begin{eqnarray*}
+    \Psi\colon k[X_{11},\ldots,X_{nn}] &\to& k[t] \\
+    X_{ij} &\mapsto& \begin{cases*}
+      0 & if $i \neq j$\\
+      1 & if $i = j \neq 1$ \\
+      t & if $i = j = 1$.
+    \end{cases*}
+  \end{eqnarray*}
+  Set $\ol p = \Psi(p)$. Then $\ol p(\lambda) = p(\diag(\lambda,1,\ldots,1))$ for $\lambda \in k$. Consider $A \in \GL_n(k)$, $B = \diag(\det A,1,\ldots,1)$ and $S := AB^{-1} \in G$. Then \[ f(A) = f(SB) = f(B) = \ol p(\det A) = (\ol p(\det))(A). \] Therefore $f=\ol p(\det) = 0$ when restricted to $\GL_n(k)$.
+  
+  We now claim the \emph{Zariski property I}: If $h\in \Ps_k(\Mat n k)$ such that $h|_{\GL_n(k)} = 0$ then $h=0$. We will prove this in \cref{cor:IV.8}.
+  
+  As a consequence $f=\ol p(\det)$ as elements in $\Ps_k(\Mat n k)^G$. Hence $f$ is contained in the subalgebra generated by $\det$, and $\Ps_k(\Mat n k)^G$ is generated as an algebra by $\det$.
+\end{proof}
+
+Let $\chi_A(t) = \det(tI_n-A)$ denote the characteristic polynomial of $A \in \Mat n k$. We can expand this to \[\chi_A(t) = t^n-s_1(A)t^{n-1} + s_2(A)t^{n-2} - \ldots + (-1^n)s_n(A) \] with $s_i \in \Ps_k(\Mat nk)$ for all $1\le i \le n$. For $A= \diag(d_1,\ldots,d_n)$ we have $s_i(A) = e_i^{(n)}(d_1,\ldots,d_n)$.
+
+\lecture{November 5, 2018}
+
+\begin{thm}[Invariant Theorem II] \label{thm:inv thm II}
+  Let $G = \GL_n(k)$ act on $\Mat nk$ by conjugation $S.A = SAS^{-1}$ for $S \in \GL_n(k)$ and $A \in \Mat nk$. Then $\Ps_k(\Mat nk)^G$ is generated as a $k$-algebra by $s_1,\ldots,s_n$. Moreover these elements are algebraically independent over $k$, i.e.
+  \begin{eqnarray*}
+    \Ps_k(\Mat nk)^G &\to& k[t_1,\ldots,t_n] \\
+    s_i &\mapsto& t_i
+  \end{eqnarray*}
+  is an isomorphism of $k$-algebras.
+\end{thm}
+\begin{proof}
+  Obviously, $s_i \in \Ps_k(\Mat nk)$. They are $G$-invariant because $\chi_A(t)$ is invariant under conjugation. Thus $s_i \in \Ps_k(\Mat nk)^G$ for all $1\le i\le n$.
+  
+  Now let us show that the $s_i$ are algebraically independent. Take $p\in k[t_1,\ldots,t_n]$ such that $p(s_1,\ldots,s_n)=0$. Then $p(s_1,\ldots,s_n)(A) = 0$ for all $A \in \Ps_k(\Mat nk)$, so also for all diagonal matrices $\diag(d_1,\ldots,d_n)$. Using our observation from above we get $p\pa{e_1^{(n)},\ldots,e_n^{(n)}}(d_1,\ldots,d_n) = 0$ for all $d_i \in k$. Thus $p\pa{e_1^{(n)},\ldots,e_n^{(n)}} = 0$. By the \namereff{thm:symmetric polys} we get $p=0$ as the $e_i^{(n)}$ are algebraically independent.
+  
+  We still need to prove that the $s_i$ generate $\Ps_k(\Mat nk)^G$ as an algebra. Take $f\in \Ps_k(\Mat nk)^G$. Since it is polynomial, there exists a $p\in k[t_{11},\ldots,t_{nn}]$ such that $f(A) = p(a_{11},\ldots,a_{nn})$ for $A = (a_{ij})$. Define the algebra homomorphism
+  \begin{eqnarray*}
+    \Phi\colon k[t_{11},\ldots,t_{nn}] &\to& k[t_1,\ldots,t_n] \\
+    t_{ij} &\mapsto& \begin{cases*} t_i & if $i=j$ \\ 0 & otherwise \end{cases*}
+  \end{eqnarray*}
+  and $\ol p := \Phi(p)$. Hence $f(\diag(d_1,\ldots,d_n)) = \ol p(d_1,\ldots,d_n)$ by definition.
+  
+  Now we want to show that $\ol p$ is symmetric, i.e. $\ol p \in k[t_1,\ldots,t_n]^{S_n}$. We already have an isomorphism of algebras
+  \begin{eqnarray*}
+    \beta\colon k[t_1,\ldots,t_n] &\to& \Ps_k(k^n) \\
+    t_i &\mapsto& \phi_i\;\text{(coordinate function)}
+  \end{eqnarray*}
+  in standard basis. Now $\beta$ is $S_n$-equivariant if we let $S_n$ act on $k^n$ by permuting the standard basis vectors $e_i$. It is enough to show that $\beta(\ol p)$ is $S_n$ invariant. Realise $g \in S_n$ as a permutation matrix $A_g$ such that $A_gE_i = E_{g(i)}$. For $D=\diag(d_1,\ldots,d_n)$ we have $A_gDA_{g^{-1}} = \diag\pa{d_{g^{-1}(1)},\ldots,d_{g^{-1}(n)}}$. We gets
+  \begin{align*}
+    (g.\beta(\ol p))(d_1,\ldots,d_n) &= \beta(\ol p)\pa{g^{-1}.(d_1,\ldots,d_n)} = \beta(\ol p)\pa{d_{g^{-1}(1)},\ldots,d_{g^{-1}(n)}} \\
+    &= f\pa{\diag\pa{d_{g^{-1}(1)},\ldots,d_{g^{-1}(n)}}} = f\pa{A_{g^{-1}}DA_g} \\
+    &= f\pa{A_{g_{-1}}D\pa{A_{g^{-1}}}^{-1}} = f(D)
+  \end{align*}
+  for all $g\in S_n$ as $f$ is $G$-invariant. Thus $\ol p$ is a symmetric polynomial.
+  
+  By the \namereff{thm:symmetric polys} we have a $q\in k[t_1,\ldots,t_n]$ with $\ol p = q\pa{e_1^{(n)},\ldots,e_n^{(n)}}$. For $D = \diag(d_1,\ldots,d_n)$ we have \[f(D) = q\pa{e_1^{(n)},\ldots,e_n^{(n)}}(d_1,\ldots,d_n) = q(s_1,\ldots,s_n)(D).\] Therefore $f-q(s_1,\ldots,s_n) = 0$ whe restricted to diagonal matrices.
+  
+  We now claim the \emph{Zariski property II}: If $h\in \Ps_k(\Mat nk)^G$ such that $h|_{\substack{\text{\tiny diagonal}\\\text{\tiny matrices}}} = 0$ then $h = 0$. We will prove this later (see \cref{lem:IV.11}).
+  
+  As a consequence $f - q(s_1,\ldots,s_n)  = 0$ (on all matrices in $\Mat nk$). It follows that $s_1,\ldots,s_n$ generate $\Ps_k(\Mat nk)^G$.
+\end{proof}
+
+Another family of elements in $\Ps_k(\Mat nk)^{\GL_n(k)}$ (under conjugation action) are the \emph{power traces}
+\begin{eqnarray*}
+  \Tr_j\colon \Mat nk &\to& k \\
+  A &\mapsto& \Tr(A^j).
+\end{eqnarray*}
+Obviously $\Tr_j \in \Ps_k(\Mat nk)$. They are $\GL_n(k)$-invariant as we have \[ (S.\Tr_j)(A) = \Tr_j(S^{-1}AS) = \Tr(S^{-1}A^jS) = \Tr(A^j) = \Tr_j(A) \] for all $S \in \GL_n(k)$ and $A \in \Mat nk$.
+
+\begin{thm}
+  Let $n\ge 1$ and $k$ an infinite field with $\chr k = 0$ or $\chr k > n$. Then $\Tr_1,\ldots,\Tr_n$ generate $\Ps_k(\Mat nk)^{GL_n(k)}$ as a $k$-algebra and are algebraically independent. Hence
+  \begin{eqnarray*}
+    k[t_1,\ldots,t_n] &\to& \Ps_k(\Mat nk)^{\GL_n(k)} \\
+    t_j &\mapsto& \Tr_j
+  \end{eqnarray*}
+  defines an isomorphism of $k$-algebras.
+\end{thm}
+\begin{proof}
+  Let $D = \diag(d_1,\ldots,d_n)$ be a diagonal matrix. Then \[\Tr_j(D) = \Tr(D^j) = \sum_{i=1}^nd_1^j = p_j^{(n)}(d_1,\ldots,d_n).\] By \cref{thm:III.14} the $p_i^{(n)}$ generate $k[X_1,\ldots,X_n]^{S_n}$ as a $k$-algebra (under the given assumptions in $k$) and they are algebraically independent. Now argue as in the proof of the \namereff{thm:inv thm II} with $e_j^{(n)}$ replaced by $p_j^{(n)}$.
+\end{proof}
+
+\begin{deff}
+  Let $W$ be a finite-dimensional $k$-vector space ($k$ infinite field). $X \subseteq W$ is \emph{Zariski-dense} (over $k$) if $f|_X = 0$ implies $f = 0$ for all $f\in \Ps_k(W)$. Let $X \subseteq Y \subseteq W$. Then $X$ is \emph{Zariski-dense in $Y$} (over $k$) if $f|_X = 0$ implies $f|_Y = 0$ for all $f\in \Ps_k(W)$.
+\end{deff}
+
+\paragraph{Examples.}
+\begin{enumerate}
+ \setcounter{enumi}{-1}
+ \item An infinite subset $X \subseteq k$ is Zariski-dense.
+ \item Let $U \subsetneq W$ be a vector subspace. Then $U$ is not Zariski-dense in $W$.
+ \begin{proof}
+    Let $w_1,\ldots,w_u$ be a basis of $U$. Extend it to a basis $w_1,\ldots,w_n$ of $W$. Consider the map
+    \begin{eqnarray*}
+      \pi\colon W &\to& k \\
+      \sum_{i=1}^n\lambda_iw_i &\mapsto& \lambda_nw_n.
+    \end{eqnarray*}
+    Obviously $\pi\in\Ps_k(W)$. Now note that $\pi|_U = 0$, but $\pi\neq 0$.
+ \end{proof}
+\end{enumerate}
+
+\paragraph{Remark.}
+Zariski density depends on $k$, e.g. $\IR \subseteq \IC$ is not dense over $\IR$ but it is over $\IC$.
+
+\begin{lem} \label{lem:IV.4}
+  Let $k$ be an infinite field and $k \subseteq L$ a field extension as well as $W$ a finite-dimensional $k$-vector space. Let $W_L := L \tp_k W$.
+  \begin{enumerate}
+    \item $k^n \subseteq L^n$ is Zariski-dense over $L$ for all $n\ge 1$.
+    \item\label{lem:IV.4:2} $W \subseteq W_L$ (by $w \mapsto 1 \tp w$) is also Zariski-dense over $L$.
+  \end{enumerate}
+\end{lem}
+\begin{proof}
+  Left to the reader.
+\end{proof}
+
+\begin{lem} \label{lem:IV.5}
+  Let $k$ be an infinite field and $k \subseteq L$ a field extension as well as $W$ a finite-dimensional $k$-vector space. Let $W_L := L \tp_k W$. Then there exists a unique algebra homomorphism $\incl\colon\Ps_k(W) \to \Ps_L(W_L)$ such that the diagram
+  \begin{center}
+    \begin{tikzcd}
+      W \arrow{r}{\can}[swap]{w\mapsto 1 \tp w}\arrow{d}[swap]{f} & W_L \arrow{d}{\incl(f)} \\
+      k \arrow[hookrightarrow]{r} & L
+    \end{tikzcd}
+  \end{center}
+  commutes for all $f\in \Ps_k(W)$. Moreover $\incl(f)$ is surjective.
+\end{lem}
+\begin{proof}
+  Let $w_1,\ldots,w_n$ be a basis of $W$. Let $\phi_1,\ldots,\phi_n$ be the coordinate functions in $\Ps_k(W)$. Then $1\tp w_1,\ldots,1\tp w_n$ is a basis of $W_L$. Let $\psi_1,\ldots,\psi_n$ be the corresponding coordinate functions in $\Ps_L(W_L)$. Define $\incl(\phi_i) = \psi_j$. This results in a unique $k$-algebra homomorphism since the $\psi_1,\ldots,\psi_n$ are algebraically independent over $L$. The map is injective as the basis $\phi_i^a = \phi_i^{a_1}\cdots\phi_i^{a_n}$ with $a = (a_1,\ldots,a_n) \in \IZ_{\ge 0}^n$ is mapped to linearly independent elements.
+ 
+  Now we show that the above diagram commutes. For $f\in\Ps_k(W)$ we write $f = p(\phi_1,\ldots,\phi_n)$ for some polynomial $p\in k[t_1,\ldots,t_n]$. Then
+  \begin{align*}
+    (\incl(f) \circ \can)\pa{\sum_{i=1}^n\lambda_iw_i} = p(\psi_1,\ldots,\psi_n)\pa{\sum_{i=1}^n\lambda_i(1\tp w_i)} &= p(\lambda_1,\ldots,\lambda_n), \\\intertext{but on the other hand}
+    f\pa{\sum_{i=1}^n\lambda_iw_i} = p(\phi_1,\ldots,\phi_n)\pa{\sum_{i=1}^n\lambda_iw_i} &= p(\lambda_1,\ldots,\lambda_n).
+  \end{align*}
+  
+  Finally, assume that $\incl'$ is another such algebra homomorphism. We have $\incl(f) = \incl'(f) \in \Ps_L(W_L)$ for all $f\in \Ps_k(W)$. By definition $(\incl(f) - \incl'(f))|_W = 0$. By \cref{lem:IV.4} \ref{lem:IV.4:2} $W \subseteq W_L$ is dense over $L$. Therefore $\incl(f) = \incl'(f)$ for all $f \in \Ps_L(W_L)$.
+\end{proof}
+
+\begin{cor}
+  Let $k$ be an infinite field and $k \subseteq L$ a field extension as well as $W$ a finite-dimensional $k$-vector space. Let $W_L := L \tp_k W$. Then
+  \begin{eqnarray*}
+    \Phi\colon {\Ps_k(W)}_L &\to& \Ps_L(W_L) \\
+    \lambda \tp f &\mapsto& \lambda\incl(f)
+  \end{eqnarray*}
+  is an isomorphism of $k$-algebras.
+\end{cor}
+\begin{proof}
+  Take $k$-bases $\phi^a$ and $\psi^a$ of $\Ps_k(W)$ and $\Ps_L(W_L)$ for $a \in \IZ_{\ge0}^n$, respectively. Then $\Phi(1 \tp \phi^a) = \incl(\phi^a) = \psi^a$, a basis vector over $L$. Hence $\Phi$ is an isomorphism of $k$-vector spaces since it sends a basis to a basis. It is an algebra homomorphism by \cref{lem:IV.5}.
+\end{proof}
+
+\begin{lem} \label{lem:IV.7}
+  Let $k$ be an infinite field and $W$ a finite-dimensional $k$-vector space. For $h\in\Ps_k(W)\setminus\set0$ define $W_h := \set{w\in W\given h(w) \neq 0}$. Then $W_h \subseteq W$ is Zariski-dense (over $k$).
+\end{lem}
+\begin{proof}
+  Let $f \in \Ps_k(W)$ with $f|_{W_h} = 0$. Then $fh = 0$ as we have $(fh)(w) = f(w)h(w) = 0$ for all $w \in W$. Since $\Ps_k(W)$ is an integral domain we have $f=0$ since $h \neq 0$.
+\end{proof}
+
+\begin{cor} \label{cor:IV.8}
+  $\GL_n(k) \subseteq \Mat nk$ is Zariski-dense (over $k$). This proves Zariski property I.
+\end{cor}
+\begin{proof}
+  Use \cref{lem:IV.7} with $W = \Mat nk$ and $h= \det$.
+\end{proof}
+
+\lecture{November 8, 2018}
+
+In the proofs of \nameref{thm:inv thm I} and \nameref{thm:inv thm II} we assumed the following properties:
+\begin{description}
+  \item[Zariski property I:] If $f\in\Ps_k(\Mat nk)$ such that $f|_{\GL_n(k)} = 0$ then $f=0$.
+  \item[Zariski property II:] If $f\in\Ps_k(\Mat nk)^{\GL_n(k)}$ such that $f|_{\substack{\text{\tiny diagonal}\\\text{\tiny matrices}}} = 0$ then $f=0$.
+\end{description}
+
+We already proved Zariski property I in \cref{cor:IV.8}.
+
+\begin{lem} \label{lem:IV.9}
+  Let $G$ be a group, $W$ a finite-dimensional representation of $G$ over $k$ and $f\in\Ps_k(W)^G$.
+  \begin{enumerate}
+    \item If $X\subseteq W$ such that $G.X = \set{g.x \given g\in G,x \in X}$ is Zariski-dense and if $f|_X = 0$ then $f=0$. \label{lem:IV.9:1}
+    \item If there exists a Zariski-dense orbit then $f$ is constant. \label{lem:IV.9:2}
+  \end{enumerate}
+\end{lem}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[label=\ref{lem:IV.9:\arabic*}]
+    \item As $f$ is $G$-invariant we have $f(g.x) = f(x) = 0$ for all $g\in G$ and $x\in X$. Thus, $f|_{G.X} = 0$, and $f=0$ as $G.X$ is Zariski-dense.
+    \item As $f$ is $G$-invariant it is constant on $G$-orbits. Let $O$ be a dense $G$-orbit. Then there exists a $\lambda\in k$ such that $(f-\lambda)|_O = 0$. As $O$ is dense, we get $f-\lambda = 0$ or $f=\lambda$.
+    \qedhere
+  \end{enumerate}
+\end{proof}
+
+\begin{prop} \label{prop:IV.10}
+  Let $k=\ol k$. Define \[ \Diag_n(k) := \set*{A\in \Mat nk\given \text{$A$ diagonizable}}. \] Then $\Diag_n(k)$ is Zariski-dense in $\Mat nk$.
+\end{prop}
+\begin{proof}
+  Let $f\in\Ps_k(\Mat nk)$ such that $f|_{\Diag_n(k)}=0$. We show that $f=0$. Let $A \in \Mat nk$. As $k=\ol k$, $A$ has a Jordan normal form, i.e. $S \in \GL_n(k)$ such that $SAS^{-1}$ is in Jordan normal form with diagonal entries $b_1,\ldots,b_n \in k$ (not necessarily distinct). Define functions $D,M,\phi\colon k\to \Mat nk$ as follows. Fix pairwise distinct $a_1,\ldots,a_n \in k$ (possible since $\abs k = \infty$). Now set
+  \begin{align*}
+    D(z) &= z\diag(a_1,\ldots,a_n), \\
+    M(z) &= SAS^{-1} + D(z), \\
+    \phi(z) &= S^{-1}M(z)S = A + S^{-1}D(z)S.
+  \end{align*}
+  Note that the eigenvalues of $\phi(z)$ are $b_1 + a_1z,\ldots,b_n+a_nz$ and $\phi(0) = A$.
+  
+  The eigenvalues of $\phi(z)$ are pairwise distinct for all but finitely many $z\in k$. To see this choose $z\in k$ such that $b_i + a_iz = b_j+ a_jz$ for $i\neq j$. Then $z = \frac{b_i-b_j}{a_j-a_i}$. So $z$ is uniquely determined by this equation.
+  
+  Thus $\phi(z) \in \Diag_n(k)$ and $f(\phi(z)) = 0$ for all but finitely many $z\in k$. Now we have $f\circ \phi \in \Ps_k(W)$ such that $f\circ \phi$ vanishes on all but finitely many $z\in k$. But as $\abs k =\infty$ we get $f\circ\phi = 0$ and $0 = f(\phi(0)) = f(A)$.
+\end{proof}
+
+In particular Zariski property II holds for $k=\ol k$: Take $f\in\Ps_k(\Mat nk)^{\GL_n(k)}$ such that $f|_{\D_n(k)} = 0$ where $D_n(k)$ is the set of diagonal matrices in $\Mat nk$. By \cref{lem:IV.9} we get $f|_{\Diag_n(k)} = 0$ and by \cref{prop:IV.10} $f = 0$.
+
+\begin{lem} \label{lem:IV.11}
+  Let $k$ be an infinite field and $L=\ol k$. If $f\in\Ps_k(\Mat nk)^{\GL_n(k)}$ then $\incl(f)\in\Ps_L(\Mat nk)^{\GL_n(k)}$.
+\end{lem}
+
+\bigskip
+
+We claim that this Lemma implies Zariski property II.
+\begin{proof}
+  Let $f\in\Ps_k(\Mat nk)^{\GL_n(k)}$ such that $f|_{\D_n(k)}=0$. Consider $\hat f = \incl(f)$. By definition of $\incl$ we have $\hat f(A) = f(A)$ for all $A \in \D_n(k)$ (note that $\D_n(k) \subseteq D_n(L) = {\D_n(k)}_L$ by scalar extension). Thus $\hat|_{\D_n(k)} = 0$. As $\D_n(k)$ is Zariski-dense in $\D_n(L) = {\D_n(k)}_L$ by \cref{lem:IV.4} \ref{lem:IV.4:2} we get $\hat f|_{D_n(L)} = 0$. Then $\hat f = 0$ by \cref{lem:IV.11} and the discussion above. As $\incl$ is injective by \cref{lem:IV.5} we have $f=0$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:IV.11}]
+  Let $f\in\Ps_k(\Mat nk)^{\GL_n(k)}$. Denote $\hat f = \incl(f)$. Define
+  \begin{eqnarray*}
+    \gamma\colon \Mat nk \times \Mat nL &\to& L \\
+    (A,B) &\mapsto& \hat f (AB) - \hat f(BA). % defect
+  \end{eqnarray*}
+  We want to show that $\gamma = 0$. For $S \in \GL_n(k)$ and $A\in\Mat nk$ we have $f(SA) = f(SASS^{-1}) = f(AS)$ as $f$ is $\GL_n(k)$-invariant. Thus $\hat f(AS) = f(AS) = f(SA) =\hat f(SA)$ and $\gamma(S,A) = 0$ for all $S \in \GL_n(k)$ and $A \in \Mat nk$.
+  
+  Fix $S \in \GL_n(k)$ and define
+  \begin{eqnarray*}
+    \gamma_S\colon \Mat nL &\to& L \\
+    A &\mapsto& \gamma(S,A).
+  \end{eqnarray*}
+  We have $\gamma_S \in \Ps_L(\Mat nL)$ and $\gamma_S|_{\Mat nk} = 0$. As $\Mat nk$ is dense in ${\Mat nk}_L = \Mat nL$ (over $L$) we get $\gamma_S = 0$. Therefore $\gamma(S,A) = 0$ for all $S \in \GL_n(k)$ and $A \in \Mat nL$.
+  
+  Fix $A \in \Mat nL$ and define
+  \begin{eqnarray*}
+    \gamma^A\colon \Mat nL &\to& L \\
+    B &\mapsto& \gamma(B,A).
+  \end{eqnarray*}
+  Again $\gamma^A\in \Ps_L(\Mat nL)$ and $\gamma^A|_{\GL_n(k)} = 0$. The reader may check that $\GL_n(k)$ is Zariski-dense in $\Mat nL$ over $L$. Then $\gamma^A = 0$. As $A$ as arbitrary we get $\gamma = 0$.
+  
+  Now let $S \in \GL_n(L)$ and $A\in\Mat nL$. Then $\hat f(SAS^{-1}) = \hat f (AS^{-1}S) = \hat f (A)$, and $\hat f \in\Ps_l(\Mat nL)^{\GL_n(L)}$.
+\end{proof}
+
+\section{Semisimple modules and the Artin-Wedderburn theorem}
+In this seciion $R$ is a ring with $1$, but not necessarily commutative. Modules are left modules.
+
+\subsection{Semisimple modules}
+\begin{deff}
+  An $R$-module $M$ is called \emph{irreducible} if $M\neq 0$ and if $M$ has no other submodules other than $0$ and $M$.
+\end{deff}
+
+\begin{prop} \label{prop:V.1}
+  Let $M$ be an $R$-module. Then the following are equivalent:
+  \begin{enumerate}
+    \item $M$ is the sum off irreducible submodules, i.e. there exists a collection $(L_i)_{i\in I}$ of irreducible submodules $L_i \subseteq M$ such that $M= \sum_{i\in I}M_i$.
+    \item $M$ is isomorphic to a direct sum of irreducible $R$-modules, i.e. there exists a collection $(L_i)_{i\in I}$ of irreducible $R$-modules $L_i$ such that $M \cong \bigoplus_{i\in I}L_i$.
+    \item Every submodule of $M$ has a complement, i.e. for every submodule $M' \subseteq M$ there exists a submodule $M'' \subseteq M$ such that $M' \cap M''$ and $M' + M'' = M$.
+  \end{enumerate}
+\end{prop}
+\begin{proof}
+  Left to the reader.
+\end{proof}
+
+\begin{deff}
+  An $R$-module is called \emph{semisimple} if it satisfies one of the equivalent conditions from \cref{prop:V.1}.
+\end{deff}
+
+\paragraph{Examples.}
+\begin{enumerate}
+  \item Let $R=k$ a field. The irreducible $R$-modules are the $1$-dimensional $k$-vector spaces as every $k$-vector space has a basis. Thus every $k$-vector space is semisimple.
+  \item Let $k$ be a field and \[R=\set*{\begin{pmatrix}a&b\\0&c\end{pmatrix} \given a,b,c\in k}.\] Let $M=k^2$ with the obvious $R$-module structure. Then $M' = \gen{\begin{pmatrix}1\\0\end{pmatrix}}_k$ is a proper submodule, and $M$ is not irreducible. But $M'$ does not have a complement, thus $M'$ does not have a complement, and $M$ is not semisimple.
+  \item Let $G$ be a finite group and $R=kG$ such that $\chr k \nmid \abs G$. By \namereff{thm:maschke} every finite-dimensional $kG$-module is semisimple.
+\end{enumerate}
+
+\begin{lem} \label{lem:V.2}
+  \leavevmode
+  \begin{enumerate}
+    \item If $(M_i)_{i\in I}$ is a collection of semisimple $R$-modules then $\bigoplus_{i\in I}M_i$ is semisimple. \label{lem:V.2:1}
+    \item Let $M$ be semisimple and $N\subseteq M$ a submodule. Then $N$ and $\fak MN$ are semisimple. \label{lem:V.2:2}
+  \end{enumerate}
+\end{lem}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[label=\ref{lem:V.2:\arabic*}]
+    \item As the $M_i$ are semisimple there exist irreducible modules $L_i^{(j)}$ with $j \in J_i$ such that $M_i \cong \bigoplus_{j\in J_i}L_i^{(j)}$. Then we have \[\bigoplus_{i\in I}\bigoplus_{j\in J_i}L_i^{(j)} = \bigoplus_{i\in I} M_i.\]
+    \item \begin{description}
+      \item[$N$ is semisimple:] It is enough to show that any submodule of $N$ has a complement in $N$. Consider a submodule $U\subseteq N$ which also is a submodule of $M$. Since $M$ is semisimple there exists a complement $C$ of $U$ in $M$, i.e. $M= U \oplus C$ as $R$-modules. Set $C' = N\cap C$. We want to show that $N=U \oplus C'$. Take $y \in N$. Then we have $n\in U$ and $c \in C$ such that $y=u+c$. Now $c = y-u\in N$ since $u\in U \subseteq N$. Then $c \in C \cap N = C'$. We get $N = U+C'$ and then $N=U\oplus C'$ since $U\cap C=0$.
+      \item[$\fak MN$ is semisimple:] We have $\fak MN \cong C'$ as $R$-modules. Since $C'$ is a submodule of $N$ it is semisimple by \ref{lem:V.2:1}. Hence $\fak MN$ is semisimple.
+      \qedhere
+    \end{description}
+  \end{enumerate}
+\end{proof}
+
+\lecture{November 12, 2018}
+
+\begin{deff}
+  Let $M$ be an $R$-module and $L$ an irreducible $R$-module. Then \[\Iso_L(M) := \sum_{\mathclap{\substack{\text{$E \subseteq M$ submodule}\\\text{$E\cong L$ as $R$-modules}}}}E \] is the $L$-isotypic component of $M$.
+\end{deff}
+
+\begin{lem}[Schur's lemma] \label{lem:schur mod}
+  Let $M$ be an irreducible $R$-module. Then:
+  \begin{enumerate}
+    \item Let $N$ be an irreducible $R$-module and $f\colon M\to N$ an $R$-module homomorphism. Then $f=0$ or $f$ is an isomorphism. \label{lem:schur mod:1}
+    \item $\End_R(M)$ is a skew field (i.e. a field, but the multiplication is not necessarily commutative). \label{lem:schur mod:2}
+  \end{enumerate}
+  If $R$ is moreover a $k$-algebra:
+  \begin{enumerate}
+    \setcounter{enumi}{2}
+    \item $\End_R(M)$ is a division algebra (i.e. an algebra where all nonzero elements have a multiplicative inverse). \label{lem:schur mod:3}
+    \item If $\ol k = k$ and $\dim_k M <\infty $ then $\End_R(M) \cong k$ by $\lambda_{\id} \mapsfrom \lambda$. \label{lem:schur mod:4}
+  \end{enumerate}
+\end{lem}
+\begin{proof}
+  We omit the proofs of \ref{lem:schur mod:1}, \ref{lem:schur mod:2} and \ref{lem:schur mod:3} (see the proof of \namereff{lem:schur} for representations).
+  
+  Now we show \ref{lem:schur mod:4}. We claim that if $D$ is a division algebra (over $k$) and $\dim_kD<\infty$ we have $D=k$. To see this let $0\neq a \in D$. The elements $1,a,a^2,\ldots,$ are linearly dependent because $\dim_kD < \infty$. Therefore we have a $p \in k[t]$ with $p(a) = 0$ and $p\neq 0$. Since $k=\ol k$ we have $p(t) = \prod_{i=1}^n(t-a_i)$ for some $a_i \in k$. Now $0 = p(a) = \prod_{i=1}^n(a-a_i)$, and we get $a=a_i$ for some $i$. Thus $a \in k$ and $D=k$.
+  
+  Now $\End_R(M) \subseteq \End_k(M)$ is finite dimensional by assumption, hence by \ref{lem:schur mod:3} a finite dimensional divison algebra. Our claim implies \ref{lem:schur mod:4}.
+\end{proof}
+
+\begin{lem} \label{lem:V.4}
+  Let $M$ be a semisimple $R$-module. Let $\phi\colon \bigoplus_{i\in I}L_i \to M$ be an isomorphism of $R$-modules with $L_i$ ($i\in I$) irreducible. Then \[ \Iso_L(M) = \phi\pa{\bigoplus_{j\in J}L_j}\] where $J=\set{i\in I\given L_i \cong L}$.
+\end{lem}
+\begin{proof}
+  Since $\phi$ is an $R$-module isomorphism (hence injective) we have $\phi\pa{\bigoplus_{i\in I} L_i} = \bigoplus_{i\in I}\phi(L_i)$ and $\phi(L_i) \cong L_i$ for all $i\in I$ (by \namereff{lem:schur mod}).
+  \begin{description}
+    \item[\enquote{$\supseteq$}:] ${\displaystyle \phi\pa{\bigoplus_{j\in J}L_j} =\bigoplus_{j\in J}\underbrace{\phi(L_j)}_{\cong L_j \cong L} = \sum_{j\in J}\phi(L_j) \subseteq \Iso_L(M)}$.
+    \item[\enquote{$\subseteq$}:] Assume $\Iso_L(M) \nsubseteq \phi\pa{\bigoplus_{j\in J}L_j}$. Then there exists a $i_0 \in I$ such that $i_0 \notin J$ and the map \[f\colon \Iso_l(M) \hookrightarrow M \to \phi(L_{i_0})\] ($M\to \phi(L_{i_0})$ by projection) is nonzero. Then there exists a submodule $L\subseteq M$ such that $f|_L \neq 0$ and $f$ defines a nonzero $R$-module homomorphism $L\to \phi(L_{i_0}) \cong L_{i_0}$, contradictory to \namereff{lem:schur mod} since $i_0\notin J$.
+    \qedhere
+  \end{description}
+\end{proof}
+
+\begin{deff}
+  We define \[\Irr(R) := \set*{\substack{\text{isoclasses of irre-}\\\text{ducible $R$-modules}}} := \fak{\set*{\substack{\text{irreducible}\\\text{$R$-modules}}}}\sim\] where $L\sim L'$ if $L\cong L'$ as $R$-modules. We often fix a system of representatives for the isoclasses and identify the set of representatives with $\Irr(R)$.
+\end{deff}
+
+\paragraph{Remark.}
+$\Irr(R)$ is indeed a set.
+\begin{proof}
+  Let $L$ be an irreducible $R$-module. Pick $0 \neq m\in L$. This generates $L$ as an $R$-module. We get a surjective $R$-module homomorphism
+  \begin{eqnarray*}
+    \phi\colon R &\to& L \\
+    1 &\mapsto& m.
+  \end{eqnarray*}
+  Henc $\fak R{\ker\phi} \cong L$ and $\ker\phi = \Ann_R(m)$ is a left ideal. Since $L$ is irreducible, $\ker\phi$ is in fact maximal. But maximal left ideals form a set.
+\end{proof}
+
+\paragraph{Example.}
+$R=k$ a field. If $V$ is an $R$-module (i.e. $k$-vector space) then $\gen v \subseteq V$ is a submodule of $V$ for all $v\in V$. Thus $\Irr(R) = \set k$.
+
+\begin{lem}
+  Let $M$ be a semisimple $R$-module. Then we have \[ M = \bigoplus_{\mathclap{L\in\Irr(R)}}\Iso_L(M), \] the \emph{isotypic decomposition}.
+\end{lem}
+\begin{proof}
+  As $M$ is semisimple there exists an isomorphism of $R$-modules $ \phi\colon \bigoplus_{i\in I} L_i \to M $ with irreducible modules $L_i$ ($i \in I$). Now group summands which belong to the same isomorphism class in $\Irr(R)$ and use \cref{lem:V.4}.
+\end{proof}
+
+\paragraph{Example.}
+If $R=k$ a field then \[ M = \bigoplus_{\mathclap{L\in\Irr(k) = \set k}}\Iso_L(M) = \underbrace{\Iso_k(M)}_{\mathclap{\text{$k$-isotypic component}}} \] and we get $M \cong \bigoplus_{i\in I}k$. The existence of such an isomorphism is equivalent to the existence of a basis. Each such iso corresponds to a choice of a basis.
+
+\subsection{Hilbert's theorem}
+\begin{thm}[Hilbert's theorem] \label{thm:hilbert}
+  Let $G$ be a group and $W$ a finite-dimensional representation of $G$ over $k$ ($k$ an infinite field). Assume $\Ps_k(W) \cong \bigoplus_{i\in I}L_i$ as representations of $G$ with irreducible $L_i$ ($i\in I$). Then $\Ps_k(W)^G$ is finitely generated as a $k$-algebra.
+\end{thm}
+
+\paragraph{Remark.}
+The assumption says precisely that $\Ps_k(W)$ is a semisimple $kG$-module.
+
+\paragraph{Remarks.}
+\begin{itemize}
+  \item If $G$ is a finite group and $\chr k\nmid \abs G$ then $\Ps_k(W) = \bigoplus_{d\ge 0}{\Ps_k(W)}_d$ (see \cref{prop:III.19}) is a graded algebra with finite-dimensional homogeneous components ${\Ps_k(W)}_d$ with are then finite-dimensional representations of $G$.
+  
+  By \namereff{thm:maschke} $\Ps_k(W)$ is semisimple and so $\Ps_k(W) = \bigoplus_{d\ge0}{\Ps_k(W)}_d$ is semisimple by \cref{lem:V.2}.
+  \item In the case $R=kG$ for some group $G$ the semisimplicity is often called \emph{complete reducibility}.
+\end{itemize}
+
+\paragraph{Goal.} We want to find examples where \namereff{thm:hilbert} holds. This will lead us to \emph{reductive groups} ($\SL_n(k)$, $\GL_n(k)$, algebraically closed fields, \ldots).
+
+\begin{lem} \label{lem:V.7} % V.6
+  Let $B=\bigoplus_{d\ge0}B_d$ be a non-negatively graded $k$-algebra. Consider the (two-sided) ideal $B_+ \cong \bigoplus_{d>0}B_d$. If $B_d$ is a finitely generated ideal in $B$, then $B$ is finitely generated as a $B_0$-algebra. Moreover one can finite a finite generating set of homogeneous elements.
+\end{lem}
+\begin{proof}
+  Left to the reader.
+\end{proof}
+
+\begin{lem} \label{lem:V.8} % V.7
+  Let $A$ be a commutative $k$-algebra, $G$ a group acting on $A$ by algebra automorphisms. Assume $A = \sum_{i\in I}L_i$ as representations of $G$ with the $L_i$ ($i\in I$) irreducible. (i.e. $A$ is a semisimple $kG$-module). Then:
+  \begin{enumerate}
+    \item $A = A^G \bigoplus N$ as representations where $A^G = \sum_{j\in J} L_j$ and $N = \sum_{i\in I\setminus J}L_i$ with $J = \set{i\in I\given L_i \cong T}$ and the trivial representation $T$. \label{lem:V.8:1}
+    \item The \emph{Reynolds operator} $\pi\colon A \to A^G$ (projection) satisfies $\pi(ba) = b\pi(a)$ for all $b\in A^G$ and $a\in A$. \label{lem:V.8:2}
+  \end{enumerate}
+\end{lem}
+\begin{proof}
+  \leavevmode
+  \begin{enumerate}[label=\ref{lem:V.8:\arabic*}]
+    \item This follows from the isotypic decomposition $A^G = \Iso_T(A)$ and \[N= \bigoplus_{\mathclap{\substack{L\in\Irr(kG)\\ L\ncong T}}}\Iso_L(A).\]
+    \item For $s \in A^G$ consider $m_b\colon A \to A$ by $a \mapsto ba$. This is an morphism of representations as we have $m_b(g.a) = b(g.a) = (g.b)(g.a) = g.(ba) = g.m_b(a)$ for all $a \in A$ and $g\in G$. By \namereff{lem:schur mod} the restriction of $m_b$ to any $L_i$ has image isomorphic to $L_i$ or $0$. Thus $m_b(A^G) \subseteq A^G$ and $m_b(N) \subseteq N$. For $b\in A^G$ and $a \in A$ we have $\pi(ba) = \pi(ba_1+a_2) = ba_1 = b\pi(a)$ where $a = a_1+a_2$ with $a_1 \in A^G$ and $a_2 \in N$.
+    \qedhere
+  \end{enumerate}
+\end{proof}
+
+\begin{proof}[Proof of \namereff{thm:hilbert}]
+  Set $A := \Ps_k(W)$. We know that $A = \bigoplus_{d\ge 0}A_d$. By \cref{lem:V.8} we have $A = A^G \oplus N$ (with the notation from there). If $I \subseteq A^G$ is an ideal then
+  \begin{equation}
+    \pi(IA) = I\pi(A) = IA^G = I \tag{*}\label{eq:thm:hilbert}
+  \end{equation}
+  using the definition of $\pi$ and $1\in A^G$. By \cref{lem:III.5/6} we have $A^G = \bigoplus_{d\ge0}A_d^G$ and we can take $I := A^G_+ = \bigoplus_{d>0}A_d^G$. Then $\tilde I = IA$ is the ideal in $A$ generated by $I$. Since $A$ is noetherial (because $A \cong k[X_1,\ldots,X_n]$) we can find $f_1,\ldots,f_m\in I$ which generate $\tilde I$ (for some $m\in\IN$).
+  
+  We claim that $f_1,\ldots,f_m$ generate $I$ as in ideal in $A^G$. By \eqref{eq:thm:hilbert} any $x\in I$ is contained in $\pi(IA)$, hence $x = \pi\pa{\sum_{i=1}^mf_ia_i}$ for some $a_i\in A$. Using \cref{lem:V.8} \ref{lem:V.8:2} we get $x = \sum_{i=1}f_i\pi(a_i)$. As $\pi(a_i)\in A^G$ for all $i$ the claim follows.
+  
+  Now apply \cref{lem:V.7} to $B = A^G$ with $B_+ = \bigoplus_{d\ge0}A_d^G$. Then $A^G$ is finitely generated as a $B_0$-algebra. But $B_0 = A_0^G =A_0 = k1 = k$. Hence $A^G$ is a finitely generated $k$-algebra.
+\end{proof}
+
+\subsection{Semisimple rings and algebras}
+\begin{deff}
+  A ring $R$ (with $1$) is semisimple if it is semisimple as a left mdoule over itself (via the regular action given by left multiplication). In this case $R=\bigoplus_{i\in \Irr(R)}\Iso_L(R)$. An algebra $A$ is semisimple if it is semisimple as a ring.
+\end{deff}
+
+\begin{deff}
+  A ring $R$ (with $1$) is simple if $R\neq 0$ and $R=\Iso_L(R)$ for some irreducible $R$-module $L$. An algebra is simple if it is simple as a ring.
+\end{deff}
+
+\lecture{November 15, 2018}
+
+\paragraph{Remark.} Simple rings are semisimple.
+
+\paragraph{Example.}
+\begin{enumerate}
+  \item $R=k$ is a simple ring.
+  \item Let $G$ finite group and $k$ a field with $\chr k\nmid \abs G$. By \namereff{thm:maschke} $kG$ is a semisimple ring.
+  \item Let $R=\Mat nD$ with $n\in\IZ_{>0}$ and $D$ a division algebra. Then $R$ is a simple ring/$k$-algebra.
+  \begin{proof}
+    For $1\le i\le n$ let \[G = \set*{A\in\Mat nD \given \text{nonzero entries only in $i$-th column}}.\] Then $R=\Mat nD = \bigoplus_{i=1}^nC_i$ as $R$-modules because $E_{ab}E_{ji} = \delta_{jb}E_{ai}$ and $C_i\cong D^n$ as $R$-modules and $C_i\cong D^n$ as $R$-modules by $E_{ji}\mapsto e_j$ (the $j$-th basis vector). Now $D^n$ is an irreducible $R$-module since $R$ acts trasitively on $D^n$ (because then any nonzero submodule is already $D^n$). Thus $R\cong \bigoplus_{i=1}^nL$ with $L\cong D^n$ irreducible, and $R$ is simple.
+  \end{proof}
+\end{enumerate}
+
+\begin{lem} \label{lem:V.9} % V.5
+  Let $R$ be a simple ring. Then $\abs{\Irr(R)} = 1$.
+\end{lem}
+\begin{proof}
+  As $R$ is simple we have $R=\Iso_L(R)$ for some irreducible $R$-module $L$ by definition. Assume that $L'$ is another irreducible $R$-module with $L\ncong L'$. Then pick $0\neq m\in L'$ and obtain a surjective $R$-module homomorphism $R\to L'$ by $1\mapsto m$. Hence we get a nonzero $R$-module homomorphism $\Iso_L(R) \to L'$. Thus there exists a nonzero $R$-module homomorphism $L\to L'$ which is a contradiction to \namereff{lem:schur mod}. We get $L \cong L'$.
+\end{proof}
+
+% TODO insert: $D^n$ is the unique (up to isomorphism) irreducible presentation.
+
+\begin{prop} % V.7
+  Let $R$ be a semisimple ring and $M$ an $R$-module homomorphism. Then $M$ is semisimple as an $R$-module.
+\end{prop}
+\begin{proof}
+  Let $\set{m_i}_{i\in I}$ be a set of generators of the $R$-module $M$. We get a surjective $R$-module homomorphism
+  \begin{eqnarray*}
+    \bigoplus_{i\in I}R &\to& M \\
+    (0,\ldots,0,1,0,\ldots,0) &\mapsto& m_j.
+  \end{eqnarray*}
+  Now $R$ is semisimple, and it is also semisimple as a left $R$-module. By \cref{lem:V.2} $\bigoplus_{i\in I} R$ is a semisimple $R$-module and then also the quotient $M$.
+\end{proof}
+
+\begin{prop} % V.8
+  Let $R$ be a semisimple ring. Then we can find irreducible $R$-modules $L_i$ with $i\in I$ finite such that \[R \cong \bigoplus_{i\in I}L_i.\]
+\end{prop}
+\begin{proof}
+  As $R$ is a semisimple ring we can find irreducible $R$-modules $L_i$ ($i\in J$) such that $\phi\colon \bigoplus_{i\in J}L_i \to R$ is an isomorphism of $R$-modules. Write $1 = \sum_{i\in J}e_i$ with $e_i\in L_i$ and finitely many $e_i$ nonzero. Let $I=\set{i\in J\given e_i\neq 0}$. Then \[f= \phi\left|_{\bigoplus_{i\in I}}\right.\colon \bigoplus_{i\in I}L_i \to R.\] $f$ is injective (because $\phi$ is) and $1\in\im f$. We get $R1 \subseteq \im f$ because it is an $R$-module homomorphism. Thus $f$ is surjective and an isomorphism.
+\end{proof}
+
+\paragraph{Motivation.}
+Assume $R$ is a ring and $M$ an $R$-module. Then $M$ is an $R' := \End_R(M)$-module via $f.m = f(m)$ for all $f\in R'$ and $m\in M$. We call $R'$ the \emph{centralizer} of the $R$-action on $M$. What is now the centralizer of the $R'$-action on $M$? By definition we have $R'' = \End_{R'}(M) = \Endd RM$. We are interested in situations where $R'' = R'$ (the \emph{double centralizer property}).
+
+\begin{thm}[Jacobson density theorem I] \label{thm:jacobson density I}
+  Let $R$ be a ring with $1$ and $M$ a semisimple $R$-module. Consider the map
+  \begin{eqnarray*}
+    \Phi\colon R &\to& \Endd RM \\
+    r &\mapsto& (m \mapsto rm).
+  \end{eqnarray*}
+  Then the image of $\Phi$ is \enquote{dense} in the following sense: For all $f\in \Endd RM$ and $m_1,\ldots,m_s\in M$ there exists an $a\in R$ such that $f(m_i) = am_i$ for all $1\le i\le s$.
+\end{thm}
+
+\paragraph{Remark.}
+\begin{enumerate}
+  \item Consider $\Phi\colon R \to \Endd RM \subseteq \Maps(M,M)$ with the discrete topology. Then $\im\Phi$ is dense in $\Endd RM$ in the topological sense.
+  \item In the special case $M=R$ (an $R$-module via left multiplication) the \namereff{thm:jacobson density I} gives an isomorphism of algebras
+  \begin{eqnarray*}
+    \phi\colon R &\to& \Endd RM = \End_R(R) = R \\
+    r &\mapsto& (m\mapsto rm). % TODO path to $R$?
+  \end{eqnarray*}
+\end{enumerate}
+
+\begin{proof}[Proof of \namereff{thm:jacobson density I}]
+  As we have $\Phi(r)(f.m) = \Phi(r)(f(m)) = rf(m) = f(rm) = f.(\Phi(r)(m))$ for all $f\in \End_R(M)$, $m\in M$ and $r\in R$, $\Phi$ is well-defined.
+  
+  First we assume $s=1$. Let $m=m_1\in M$. Since $M$ is a semisimple $R$-module the submodule $Rm$ has a complement, i.e. $M=Rm \oplus C$ as $R$-modules. Consider $\pi\colon M = Rm \oplus C \to Rm \hookrightarrow R$ by projection. Clearly $\pi\in\End_R(M)$. For any $f\in \Endd RM$ we have $\pi\circ f = f\circ \pi$. Thus $f(m) = f(\pi(m)) = \pi(f(m)) \in Rm$, so there exists an $a\in R$ such that $f(m) = am$.
+  
+  For the general case let $m_1,\ldots,m_s\in M$ and $f\in \Endd RM$. Define
+  \begin{eqnarray*}
+    \hat f := \bigoplus_{i=1}^sf\colon M^s &\to& M^s \\
+    (n_1,\ldots,n_s) &\mapsto& (f(n_1),\ldots,f(n_s)).
+  \end{eqnarray*}
+  The reader may check that $\hat f \in \Endd R{M^s}$. Using the case $s=1$ there exists an $a\in R$ such that $\hat f((m_1,\ldots,m_s)) = a(m_1,\ldots,m_s)$. But we also have $\hat f((m_1,\ldots,m_s) = (f(m_1),\ldots,f(m_s))$, so we get $f(m_i) = am_i$ for all $1\le i\le s$.
+\end{proof}
+
+\begin{cor} % V.10
+  Let $k$ be a field and $A$ a $k$-algebra with $1$. Let $M$ be a finite-dimensional $A$-module. Then
+  \begin{eqnarray*}
+    \Phi\colon A &\to& \Endd AM \\
+    a &\mapsto& (m \mapsto am)
+  \end{eqnarray*}
+  is surjective.
+\end{cor}
+\begin{proof}
+  We have $k\subseteq \End_A(M)$, hence $\Endd AM \subseteq \End_k(M)$. Let $m_1,\ldots,m_s\in M$ be a basis of $M$. For $f\in  \Endd AM$ we find an $a\in A$ such that $f(m_i) = am_i$ for all $1\le i\le s$ by the \namereff{thm:jacobson density I}. Now $f$ is determined on a basis of $M$, and we get $f(m) = am$ for all $m\in M$.
+\end{proof}
+
+\begin{thm}[Jacobson density theorem II] \label{thm:jacobson density II} % V.11
+  Let $R$ be a ring with $1$ and $N$ a semisimple $R$-module. Let $n_1,\ldots,n_s\in N$ be linearly independent over $\End_R(M)$ and $n_1',\ldots,n_s'\in N$ arbitrary. Then there is an $r\in R$ such that $rn_i = n_i'$ for all $1\le i\le s$.
+\end{thm}
+
+\paragraph{Remark.} That means that $N^s$ is generated by $n_1,\ldots,n_s$.
+
+\begin{proof}
+  Let $x=(n_1,\ldots,n_s) \in N^s$. Now $N^s$ is semisimple. Hence $Rx$ has a complement in $N^s$, say $N^s = Rx \oplus C$. Consider $\pi\colon N^s \to C \hookrightarrow N^s$ by projection. Clearly $\pi \in \End_r(N^s)$. We can realize $\pi$ as a matrix $A=(a_{ij})\in \Mat s {\End_R(N)}$. Then $a_{i1}n_1 + a_{i2}n_2 + \ldots + a_{is}n_s = 0$ for all $1\le i\le s$ since $\pi(Rx) = 0$. Therefore $a_{ij} = 0$ for all $1\le i,j\le s$ because $n_1,\ldots,n_s$ are linearly independent over $\End_R(N)$. We get $A=0$, $\pi=0$ and $C=0$, so $N^s=Rx$. The claim follows.
+\end{proof}
+
+\begin{cor}[Burnside theorem -- coordinate form] % V.12
+  Let $k=\ol k$, $V$ a finite-dimensional $k$-vector space and $A\subseteq \End_k(V)$ a subalgebra such that $V$ is an irreducible $A$-module. Then $A = \End_k(V)$.
+\end{cor}
+\begin{proof}
+  We have $\End_k(V) = k$ by \namereff{lem:schur mod}. Now $\Phi\colon A \to \Endd AV = \End_k(V)$ is surjective by the \cref{thm:jacobson density II}, hence an isomorphism.
+\end{proof}
+
+\begin{cor}[Burnside theorem -- coordinate free] % V.13
+  Let $k=\ol k$ and $A \subseteq \Mat nk$ be a subalgebra such that $k^n$ is irreducible as an $A$-module. Then $A = \Mat nk$.
+\end{cor}
+
+\begin{cor} \label{cor:V.17} % V.14
+  Let $k=\ol k$, $A$ be a $k$-algebra and $M$ a finite-dimensional $A$-module. Then the following are equivalent:
+  \begin{enumerate}
+    \item $M$ is an ireducible $A$-module. \label{cor:V.17:1}
+    \item $\Phi\colon A \to \Endd AM$ is surjective. \label{cor:V.17:2}
+  \end{enumerate}
+\end{cor}
+\begin{proof}
+  \leavevmode
+  \begin{description}
+    \item[\ref{cor:V.17:1} $\Rightarrow$ \ref{cor:V.17:2}:] By \namereff{lem:schur mod} we have $\End_A(M) = k$, and by the \namereff{thm:jacobson density II} $\Phi$ is surjective.
+    \item[\ref{cor:V.17:2} $\Rightarrow$ \ref{cor:V.17:1}:] Let $0\neq m\in M$. For all $m' \in M$ we have an $\phi \in \End_k(M)$ such that $\phi(m) = m'$. Since $\Phi$ is surjective there exists an $a\in A$ with $\Phi(a) = \phi$. Now $m' = \phi(m) = am$, and $M$ is irreducible.
+    \qedhere
+  \end{description}
+\end{proof}
+
+\begin{cor} % V.15
+  Let $k=\ol k$, $A$ be a $k$-algebra and $M$ a finite-dimensional irreducible $A$-module. Then $(\dim_kM)^2 \le \dim_kA$.
+\end{cor}
+\begin{proof}
+  This follows from the surjectivity of $A \to \Endd AM = \End_k(M)$ (using \cref{cor:V.17}) because of $\dim_k\End(M) = (\dim_kM)^2$.
+\end{proof}
+
+
+\begin{lem} % V.16
+  Let $R_i$ ($1\le i\le n$) be rings (with $1$) and $R := R_1 \times \cdots \times R_n$. Let $1_i$ be the unit in $R_i \subseteq R$ (i.e. $(1_i)_j = \delta_{ij}$). Let $M$ be an $R$-module. Then we have:
+  \begin{enumerate}
+    \item $1 = \sum_{i=1}^n1_i$ is the unit in $R$.
+    \item $1_iM$ is an $R_i$-module via restriction of the $R$-module structure.
+    \item $M = \sum_{i=1}^n1_iM$ as $R$-modules where $R$ acts on the right-hand side by \[ (r_1,\ldots,r_n) . \sum_{i=1}^nm_i = \sum_{i=1}^nr_im_i. \] Moreover the sum is direct.
+    \item $\End_R(M) = \prod_{i=1}^n \End_R(1_iM)$.
+    \item If $M_i$ is an $R_i$-module for $1\le i\le n$ then $\bigoplus_{i=1}^n M_i$ is an $R$-module via \[(r_1,\ldots,r_n).(m_1,\ldots,m_n) = (r_1m_1,\ldots,r_nm_n).\]
+    \item $M$ is irreducible if and only if $M = 1_iM$ for some (unique) $1\le i\le n$ and $1_iM$ is irreducible as an $R_i$-module.
+    \item $R$ is semisimple if and only if each $R_i$ ($1\le i\le n$) is semisimple.
+  \end{enumerate}
+\end{lem}
+\begin{proof}
+  The proof is left to the reader. It is advisable to construct a bijection of sets \[ S_1 \times S_2 \times \cdots \times S_n \xleftrightarrow{1:1} S \] where \[ S_i := \set{\text{$R_i$-submodules of $1_iM$}} \quad\text{and}\quad S_i := \set{\text{$R$-submodules of $M$}}. \qedhere \]
+\end{proof}
+
+\newpage
+{\Large MISSING/INCOMPLETE PROOFS, TO BE INSERTED}
+
+\begin{cor} % V.17
+  Let $R$ be a ring such that \[R \cong \Mat {n_1}{D_1} \times \cdots \times \Mat{n_r}{D_r}\] as rings where $n_i \in \IN$ and the $D_i$ are skewfields. Then $R$ is a semisimple ring. Moreover $\abs{\Irr(R)} = r$.
+\end{cor}
+\begin{proof}
+  We saw that $\Mat{n_i}{D_i}$ is a simple ring. Thus it is semisimple, and $R$ is semisimple too.
+  
+  By \cref{lem:V.9} we have $\abs{\Irr(\Mat{n_i}{D_i}} = 1$.
+\end{proof}
+
+\subsection{Applicatons of the Density theorems}
+
+\begin{prop} % V.18
+  Let $k=\ol k$ b a field and $A$ and $k$-algebra. Assume that $M_1,\ldots,M_s$ are finite-dimensional pairwise non-isomorphic irreducible $A$-modules. Then
+  \begin{eqnarray*}
+    \hat\Phi\colon A &\to& \bigoplus_{i=1}^s \End_k(M_i) \\
+    a &\mapsto& ((m_1,\ldots,m_s) \mapsto (am_1,\ldots,a_ms))
+  \end{eqnarray*}
+  is surjective.
+\end{prop}
+
+\begin{prop} % V.19
+  Let $k$ be a field and $A$ a finite-dimensional $k$-algebra.
+  \begin{enumerate}
+    \item Any irreducible $A$-module is finitely generated.
+    \item If $k = \ol k$ then $A$ has only finitely many irreducible $A$-modules up to isomorphism.
+  \end{enumerate}
+\end{prop}
+
+\begin{deff}
+  Let $R$ be a ring (not necessarily with $1$). Then $R^{\op}$ denotes the opposite ring (i.e. $R^{\op} = R$ as abelian groups but with multiplication $a \circ b = ba$.
+\end{deff}
+
+\paragraph{Facts.}
+\begin{enumerate}
+  \item $R$ is unitary iff $R^{\op}$ is unitary.
+  \item $(R^{\op})^{\op} = R$
+  \item $R^{\op} = R$ iff $R$ is commutative.
+  \item $D$ is a skewfield iff $D^{\op}$ is a skewfield.
+  \item ${\displaystyle \pa{\prod_{i=1}^s R_i}^{\op} = \prod_{i=1}^sR_i^{\op}}$ for rings $R_i$ ($1\le i\le s$).
+\end{enumerate}
+
+\begin{lem}
+  Let $D$ be a skewfield and and $n\in\IN$. Then
+  \begin{eqnarray*}
+    \alpha\colon \Mat nD &\to& (\Mat n{D^{\op}})^{\op} \\
+    A &\mapsto& A^T
+  \end{eqnarray*}
+  is an isomorphism of rings.
+\end{lem}
+
+\begin{lem}
+  Let $R$ be a ring with $1$. Then $\End_R(R) \cong R^{\op}$.
+\end{lem}
+
+\paragraph{Observation.} Let $D$ be a skewfield. By \namereff{lem:schur mod} $\End_{\Mat nD}(D^n)$ ($D^n$ is an irreducible module) is again a skewfield. We want to study the connections between the two.
+
+\begin{lem}
+  Let $D$ be a skewfield and $n\in \IN$. Then $\End_{\Mat nD}(D^n) \cong D^{\op}$ as rings.
+\end{lem}
+\begin{thm}[Artin-Wedderburn]
+  Let $R$ be a semisimple ring with $1$. Then there is an isomorphism of rings \[ R \cong \Mat{n_1}{D_1}\times \ldots \times \Mat{n_r}{D_r}\] for some $n_i \in \IN$, $r\in \IN$ and some skewfields $D_i$ ($1\le i\le r$). This is unique up to permutations of the $(D_i,n_i)$.
+\end{thm}
+
+\begin{cor}
+  Let $R$ be a semisimple ring. Then $R^{\op}$ is semisimple.
+\end{cor}
+
+\begin{cor}
+  Let $A$ be a finite-dimensional semisimple $k$-algebra with $k=\ol k$. Then there exists an isomorphism of $k$-algebras $A\cong \Mat{n_1}{k}\times \ldots \times \Mat{n_r}{k}$ for some $n_i,r\in \IN$.
+\end{cor}
+
+\begin{cor}
+  Let $A$ be a finite-dimensional semisimple $k$-algebra with $k=\ol k$. Then $A$ has finitely many left ideals $I_1,\ldots,I_r$ and $A\cong \Mat{n_1}{I_1}\times \ldots \times \Mat{n_r}{I_r}$.
+\end{cor}
+
+\begin{cor}
+  Let $R$ be a simple ring. Then $R\cong \Mat nD$ as rings for some unique $n\in\IN$ and (up to skewfield isomorphism) unique skewfield $D$.
+\end{cor}
+
+\subsection{Application: Brauer group}
+\begin{deff}
+  A $k$-algebra is \emph{central-simple} if it is a finite-dimensional siple algebra and $\Z(A) = k$.
+\end{deff}
+
+\begin{lem}
+  Let $A,B$ be finite-dimensional $k$-algebras. Then $\Z(A)\tp \Z(B) = \Z(A\tp B)$ (as subsets of $A\tp B$).
+\end{lem}
+
+\begin{lem}
+  Let $A$ and $B$ be central-simple algebras. Then $A \tp B$ is central-simple.
+\end{lem}
+
+\begin{deff}
+  Let $A$ and $B$ be central-simple algebras. Then $A\sim B$ (Brauer equivalent) if $A \cong \Mat nD$ and $B \cong \Mat mC$ with $C \cong D$ as skewfields.
+\end{deff}
+
+\begin{deff}
+  The \emph{Brauer group} $\Br(k)$ ($k$ a field) has the equivalence classes of $\sim$ as elements. The composition is given by $[A]\circ [B] = [A\tp B]$. The neutral element is $[k]$, and the inverse of $[A]$ is $[A^{\op}]$.
+\end{deff}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{otherlanguage}
+\end{document}
